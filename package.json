@@ -1,0 +1,29 @@
+{
+  "name": "fix-it",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/mpatellis/COP-4331-Large-Project.git",
+  "author": "Isaac Lefler <isaaclefler@gmail.com>",
+  "license": "ISC",
+  "scripts": {
+    "client-install": "yarn install --prefix client",
+    "start": "node server",
+    "server": "nodemon server",
+    "client": "cd client && yarn start",
+    "dev": "concurrently \"yarn server\" \"npm run client\"",
+    "preinstall": "cd client && yarn install"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "concurrently": "^5.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "mongodb": "^3.3.2",
+    "mongoose": "^5.7.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.3"
+  }
+}
