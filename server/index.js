@@ -1,10 +1,23 @@
 var express = require('express')
+var mongoose = require('mongoose')
+var app = express()
+var routes = require('./routes')
 var config = require('../config')
 
-var app = express()
+//require('./middleware')(app)
 
-app.use(express.static("client/build"))
+app.use(express.static("client/build"));
 
+//app.use(routes())
+
+mongoose.set('useNewUrlParser', true)
+  .set('useFindAndModify', false)
+  .set('useCreateIndex', true)
+
+var url = config.db.url
+
+mongoose.Promise = global.Promise
+mongoose.connect(url, { useNewUrlParser: true , useUnifiedTopology: true })
 
 const PORT = config.port
 
