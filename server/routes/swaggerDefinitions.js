@@ -15,16 +15,16 @@
  *                  type: string
  *              password:
  *                  type: string
- *      Login: 
+ *      Login:
  *          required:
  *              - username
  *              - password
  *          properties:
- *              username: 
+ *              username:
  *                  type: string
- *              password: 
+ *              password:
  *                  type: string
- * 
+ *
  *      UserArray:
  *          type: array
  *          items:
@@ -44,6 +44,3 @@
  *                  hash_password:
  *                      type: string
  */
-
-
- 

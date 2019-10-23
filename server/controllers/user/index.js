@@ -9,9 +9,9 @@ exports.register = (req, res) => { // :)
   newUser.hash_password = bcrypt.hashSync(req.body.password, config.hashlength)
   newUser.save((err, user) => {
     if (err) {
-      return res.status(400).json({message: 'User could not be created'})
-    }else {
-      return res.status(204).json({message: 'User succesfully created'})
+      return res.status(400).json({ message: 'User could not be created' })
+    } else {
+      return res.status(204).json({ message: 'User succesfully created' })
     }
   })
 }
@@ -85,14 +85,14 @@ exports.deleteById = (req, res) => { // :)
 
 exports.getByUsername = (req, res) => { // :)
   User.find({ username: req.params.username })
-  .exec((err, user) => {
-    var empty = !Object.keys(user).length
-    if (err) {
-      res.send(err)
-    } else if (!empty) {
-      res.json({ exists: true })
-    } else {
-      res.json({ exists: false })
-    }
-  })
+    .exec((err, user) => {
+      var empty = !Object.keys(user).length
+      if (err) {
+        res.send(err)
+      } else if (!empty) {
+        res.json({ exists: true })
+      } else {
+        res.json({ exists: false })
+      }
+    })
 }

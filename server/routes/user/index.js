@@ -3,8 +3,6 @@ var controller = require('../../controllers')
 var loginRequired = require('../../controllers/user').loginRequired
 
 module.exports = () => {
-
-
   /**
   * @swagger
   * /user/allusers:
@@ -37,9 +35,9 @@ module.exports = () => {
   *     responses:
   *       204:
   *         description: user succesfully created.
-  *       400: 
+  *       400:
   *         description: user couldn't be created.
-  */      
+  */
   router.route('/register')// :)
     .post(controller.user.register)
 
@@ -62,24 +60,21 @@ module.exports = () => {
   *         schema:
   *           properties:
   *             token:
-  *               type: string   
-  *       401: 
+  *               type: string
+  *       401:
   *         description: login failed.
-  */      
+  */
   router.route('/login')// :)
     .post(controller.user.login)
-
-
-  
 
   router.route('/')
     /**
     * @swagger
-    * 
+    *
     * /user/:
     *   get:
     *     tags: [user]
-    *     summary: get logged in user 
+    *     summary: get logged in user
     *     description: login user returns JWT
     *     security:
     *       - BearerAuth: []
@@ -89,19 +84,19 @@ module.exports = () => {
     *         schema:
     *           properties:
     *             token:
-    *               type: string   
-    *       401: 
+    *               type: string
+    *       401:
     *         description: login failed.
     */
     .get(loginRequired, controller.user.getById)
 
     /**
     * @swagger
-    * 
+    *
     * /user/:
     *   put:
     *     tags: [user]
-    *     summary: update user 
+    *     summary: update user
     *     description: update user info
     *     security:
     *       - BearerAuth: []
@@ -113,37 +108,37 @@ module.exports = () => {
     *           $ref: "#/definitions/User"
     *     responses:
     *       200:
-    *         description: update succesfull.   
-    *       401: 
+    *         description: update succesfull.
+    *       401:
     *         description: ubdate failed.
     */
     .put(loginRequired, controller.user.updateById)
 
     /**
     * @swagger
-    * 
+    *
     * /user/:
     *   delete:
     *     tags: [user]
-    *     summary: delete user 
+    *     summary: delete user
     *     description: delete user (does not delete user references)
     *     security:
     *       - BearerAuth: []
     *     responses:
     *       200:
-    *         description: succesfull deleted.  
-    *       401: 
+    *         description: succesfull deleted.
+    *       401:
     *         description: deletion failed.
     */
     .delete(loginRequired, controller.user.deleteById)
 
-      /**
+  /**
     * @swagger
-    * 
+    *
     * /user/username/{username}:
     *   get:
     *     tags: [user]
-    *     summary: does username exist 
+    *     summary: does username exist
     *     description: returns true if user exists
     *     parameters:
     *       - name: username
@@ -152,8 +147,8 @@ module.exports = () => {
     *         type: string
     *     responses:
     *       200:
-    *         description: succesfull lookup.  
-    *       401: 
+    *         description: succesfull lookup.
+    *       401:
     *         description: lookup failed.
     */
   router.route('/username/:username')// returns true if username exists
@@ -161,4 +156,3 @@ module.exports = () => {
 
   return router
 }
-

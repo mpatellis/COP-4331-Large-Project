@@ -7,7 +7,7 @@ var swaggerDoc = require('./swaggerDoc')
 
 require('./middleware')(app)
 
-app.use(express.static("client/build"));
+app.use(express.static('client/build'))
 swaggerDoc(app)
 
 app.use(routes())
@@ -19,10 +19,10 @@ mongoose.set('useNewUrlParser', true)
 var url = config.db.url
 
 mongoose.Promise = global.Promise
-mongoose.connect(url, { useNewUrlParser: true , useUnifiedTopology: true })
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const PORT = config.port
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
+  console.log(`Server is running on port ${PORT}`)
 })

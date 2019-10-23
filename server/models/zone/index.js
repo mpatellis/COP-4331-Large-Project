@@ -16,7 +16,7 @@ const userSchema = new Schema({
   location: {
     type: location.polygonSchema
   },
-    date_created: {
+  date_created: {
     type: Date,
     default: Date.now
   }
