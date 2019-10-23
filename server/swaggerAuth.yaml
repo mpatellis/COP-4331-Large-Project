@@ -1,0 +1,8 @@
+  securityDefinitions:
+    BearerAuth:
+      type: apiKey
+      scheme: bearer
+      in: headers
+      name: Authorization
+
+    

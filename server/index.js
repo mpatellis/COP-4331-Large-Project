@@ -3,10 +3,12 @@ var mongoose = require('mongoose')
 var app = express()
 var routes = require('./routes')
 var config = require('../config')
+var swaggerDoc = require('./swaggerDoc')
 
 require('./middleware')(app)
 
 app.use(express.static("client/build"));
+swaggerDoc(app)
 
 app.use(routes())
 

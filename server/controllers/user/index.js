@@ -9,10 +9,9 @@ exports.register = (req, res) => { // :)
   newUser.hash_password = bcrypt.hashSync(req.body.password, config.hashlength)
   newUser.save((err, user) => {
     if (err) {
-      return res.send(err)
-    } else {
-      user.hashPassword = undefined
-      return res.json(user)
+      return res.status(400).json({message: 'User could not be created'})
+    }else {
+      return res.status(204).json({message: 'User succesfully created'})
     }
   })
 }
