@@ -4,11 +4,11 @@ var app = express()
 var routes = require('./routes')
 var config = require('../config')
 
-//require('./middleware')(app)
+require('./middleware')(app)
 
 app.use(express.static("client/build"));
 
-//app.use(routes())
+app.use(routes())
 
 mongoose.set('useNewUrlParser', true)
   .set('useFindAndModify', false)
