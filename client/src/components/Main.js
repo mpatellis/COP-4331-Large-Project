@@ -153,8 +153,8 @@ const styles = {
     background: '#eaeff1',
   },
   footer: {
-    padding: theme.spacing(2),
-    background: '#f09713',
+    padding: theme.spacing(1),
+
   },
 };
 
