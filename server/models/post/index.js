@@ -19,7 +19,7 @@ const postSchema = new Schema({
     required: true
   },
   text: {
-    type: String,
+    type: String
   },
   img_id: {
     type: Schema.Types.ObjectId,
@@ -27,16 +27,19 @@ const postSchema = new Schema({
   },
   location: {
     type: location.pointSchema
+    required: true
   },
   open: {
     type: Boolean,
     default: true
   },
   up_votes: {
-    type: Number
+    type: Number,
+    default: 0
   },
   down_votes: {
     type: Number
+    default: 0
   },
     date_created: {
     type: Date,

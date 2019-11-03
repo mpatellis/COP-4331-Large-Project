@@ -3,18 +3,26 @@ var location = require('../location')
 
 const Schema = mongoose.Schema
 
-const userSchema = new Schema({
-  parent_id: {
+const zoneSchema = new Schema({
+  parent_zone_id: {
     type: Schema.Types.ObjectId,
     ref: 'zone',
-    required: true
+  },
+  master_zone_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'zone',
   },
   name: {
     type: String,
     required: true
   },
-  location: {
-    type: location.polygonSchema
+  // location: {
+  //   type: location.polygonSchema,
+  //   required: true
+  // },
+  public: {
+    type: Boolean,
+    default: false
   },
   date_created: {
     type: Date,
@@ -22,4 +30,4 @@ const userSchema = new Schema({
   }
 })
 
-module.exports = mongoose.model('user', userSchema, 'user')
+module.exports = mongoose.model('zone', zoneSchema, 'zone')

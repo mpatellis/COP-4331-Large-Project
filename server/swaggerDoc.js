@@ -15,7 +15,6 @@ const options = {
   tags: [
     {
       name: 'user',
-      description: 'Everything about your Pets'
     }],
   apis: ['server/routes/**/*.js', 'server/*.yaml']
 }
