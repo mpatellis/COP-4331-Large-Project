@@ -25,6 +25,10 @@ export default class FetchExample extends React.Component {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+      // You will need to register elsewhere
+      // Easiest way is yarn dev in root folder
+      // Then go to localhost:80/api-docs and use swagger
+      // Then comeback here and update accordingly
       body: JSON.stringify({
         username: 'hello',
         password: 'asd',
