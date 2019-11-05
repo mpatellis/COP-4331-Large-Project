@@ -6,14 +6,14 @@ const Schema = mongoose.Schema
 const postSchema = new Schema({
   user_id: {
     type: Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'user',
     required: true
   },
   zone_id: {
     type: Schema.Types.ObjectId,
-    ref: 'zone'
+    ref: 'zone',
     required: true
-  }
+  },
   title: {
     type: String,
     required: true
@@ -26,7 +26,7 @@ const postSchema = new Schema({
     ref: 'img'
   },
   location: {
-    type: location.pointSchema
+    type: location.pointSchema,
     required: true
   },
   open: {
@@ -38,7 +38,7 @@ const postSchema = new Schema({
     default: 0
   },
   down_votes: {
-    type: Number
+    type: Number,
     default: 0
   },
     date_created: {
