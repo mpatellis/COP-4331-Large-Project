@@ -6,6 +6,7 @@ module.exports = () => {
 
     router.route('/')
         .get(controller.post.getAll)
+        .post(controller.post.addNewPost)
 
     return router
 }
