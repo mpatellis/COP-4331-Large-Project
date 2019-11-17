@@ -8,5 +8,10 @@ module.exports = () => {
         .get(controller.post.getAll)
         .post(controller.post.addNewPost)
 
+    router.route('/id/:postId')
+        .get(controller.post.getById)
+        .delete(controller.post.deleteById)
+        .put(controller.post.updateById)
+
     return router
 }
