@@ -1,6 +1,15 @@
 /**
  * @swagger
  *  definitions:
+ *      Post:
+ *          required:
+ *              - title
+ *              - text
+ *          properties:
+ *              title:
+ *                  type: string
+ *              text:
+ *                  type: string
  *      User:
  *          required:
  *              - username
@@ -71,4 +80,24 @@
  *                              minItems: 2
  *                              maxItems: 2
  *                      
+ *      PostArray:
+ *          type: array
+ *          items:
+ *              required:
+ *                  - title
+ *              properties:
+ *                  open:
+ *                      type: Boolean
+ *                  up_votes:
+ *                      type: int
+ *                  down_votes:
+ *                      type: int
+ *                  _id:
+ *                      type: string
+ *                  title:
+ *                      type: string
+ *                  text:
+ *                      type: string
+ *                  user_id:
+ *                      type: string
  */
