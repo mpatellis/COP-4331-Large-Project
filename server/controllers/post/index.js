@@ -6,6 +6,7 @@ var config = require('../../../config')
 // Need to add zones and images
 exports.addNewPost = (req, res) => {
   req.body.user_id = req.user._id
+  const newPost = new Post(req.body)
 
   newPost.save((err, post) => {
     if (err) {
