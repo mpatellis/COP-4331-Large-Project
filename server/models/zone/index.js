@@ -16,10 +16,10 @@ const zoneSchema = new Schema({
     type: String,
     required: true
   },
-  // location: {
-  //   type: location.polygonSchema,
-  //   required: true
-  // },
+  location: {
+    type: location.polygonSchema,
+    required: true
+  },
   public: {
     type: Boolean,
     default: false

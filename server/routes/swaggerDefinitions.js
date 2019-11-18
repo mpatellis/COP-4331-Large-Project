@@ -43,4 +43,32 @@
  *                      type: string
  *                  hash_password:
  *                      type: string
+ *      Zone:
+ *          required:
+ *              - name
+ *              - location
+ *          properties:
+ *              parent_zone_id:
+ *                  type: string
+ *              master_zone_id:
+ *                  type: string
+ *              name:
+ *                  type: string
+ *              location:
+ *                  $ref: "#/definitions/Polygon"
+ *      Polygon:
+ *          required:
+ *              - coordinates
+ *          properties:
+ *              coordinates:
+ *                  type: array
+ *                  items: 
+ *                      type: array
+ *                      items:
+ *                          type: array
+ *                          items:
+ *                              type: number
+ *                              minItems: 2
+ *                              maxItems: 2
+ *                      
  */

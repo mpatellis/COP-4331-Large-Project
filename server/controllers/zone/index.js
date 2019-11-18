@@ -30,7 +30,7 @@ exports.getAll = (req, res) => {
  *                  if superAdmin is, null user does not own parent
  *                      else create zone
  */
-exports.creatZone = (req, res) => {
+exports.createZone = (req, res) => {
     newZone = new Zone(req.body)
     if (newZone.parent_zone_id == null) {
         newZone.save((err, resZone) => {
@@ -89,31 +89,34 @@ exports.deleateZone = (req, res) => {
             if (err || success == null) {
                 return res.status(400).json({ message: 'User does not own the zone!' })
             } else {
-                Zone.deleteOne({_id: req.body.zone_id}, (err,   sucsess) => {
-                    if (err) {
-                        return res.status(400).json({ message: 'could not delete zone' })
-                    } else {
-                        return res.json(deleteAllSubZones(req.body.zone_id))
-                        
-                    }
+                Zone.exists({parent_zone_id: req.body.zone_id}, (err, exists) => {
+                    if (err) res.send(err)
+                    if (exists) res.send({message: 'zone has children, please delete children first'})
+                    Zone.deleteOne({_id: req.body.zone_id}, (err,   success) => {
+                        if (err) {
+                            return res.status(400).json({ message: 'could not delete zone' })
+                        } else {
+                            return res.send(success)  
+                        }
+                    })
                 })
+                
             }   
         })
     })
 }
 
-deleteAllSubZones = (zone_id) => {
-    Zone.deleteMany({parent_zone_id: zone_id}, (err, children) => {
-        if (err) {
-            return err
-        } else if (children == null) {
-            return "success"
-        } else {
-            // for (c of children) {
-            //     deleteZoneAndAllSubZones(c._id)
-            // }'
-            console.log(children)
-            return "success"
-        }
+/**
+ * get zone_id from req.body
+ * get child zones
+ */
+exports.getChildren = (req, res) => {
+    Zone.find({parent_zone_id: req.body.zone_id}, (err, childern) => {
+        if (err) res.send(err)
+        res.send(childern)
     })
+}
+
+exports.isWithin = (req, res) => {
+    
 }

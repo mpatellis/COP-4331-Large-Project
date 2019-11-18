@@ -6,6 +6,6 @@ module.exports = () => {
 
     router.route('/')
         .get(controller.follow.getAll)
-
+        
     return router
 }
