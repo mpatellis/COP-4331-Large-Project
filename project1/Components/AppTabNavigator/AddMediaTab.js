@@ -4,7 +4,13 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    CameraRoll
+    CameraRoll,
+    ScrollView,
+    Modal,
+    TouchableHighlight,
+    Button,
+    Image,
+    Dimensions,
 } from "react-native";
 import {Icon} from 'native-base'
 import * as Permissions from 'expo-permissions';
@@ -12,6 +18,9 @@ import { Camera } from 'expo-camera';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { withNavigationFocus } from 'react-navigation';
 
+
+
+const { width } = Dimensions.get('window')
 class AddMediaTab extends Component{
     static navigationOptions = {
         tabBarIcon: ({tintColor}) => (
@@ -22,13 +31,31 @@ class AddMediaTab extends Component{
         hasCameraPermission: null,
         hasCameraRoll: null,
         type: Camera.Constants.Type.back,
+        modalVisible: false,
+        photos: [],
+        index: null
       };
-    
+      setIndex = (index) => {
+        if (index === this.state.index) {
+          index = null
+        }
+        this.setState({ index })
+      }
       async componentDidMount() {
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({ hasCameraPermission: status === 'granted' });
         const { we } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         this.setState({ hasCameraRoll: we === 'granted' });
+      }
+      getPhotos = () => {
+        CameraRoll.getPhotos({
+          first: 20,
+          assetType: 'All'
+        })
+        .then(r => this.setState({ photos: r.edges }))
+      }
+      toggleModal = () => {
+        this.setState({ modalVisible: !this.state.modalVisible });
       }
       render() {
         const isFocused = this.props.isFocused;
@@ -47,36 +74,72 @@ class AddMediaTab extends Component{
                     backgroundColor: 'transparent',
                     flexDirection: 'row',
                   }}>
-                  <TouchableOpacity
-                    style={{
-                      flex: 0.1,
-                      alignSelf: 'flex-end',
-                      alignItems: 'center',
-                    }}
-                    onPress={() => {
-                      this.setState({
-                        type:
-                          this.state.type === Camera.Constants.Type.back
-                            ? Camera.Constants.Type.front
-                            : Camera.Constants.Type.back,
-                      });
-                    }}>
-                    <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
-                  </TouchableOpacity>
                 </View>
-                <View style = {{alignItems: 'center'}}>
-                  <TouchableOpacity onPress={this.takePicture.bind(this)} >
-                    <MaterialCommunityIcons name = "circle-outline"style = {{ color: 'white', fontSize: 100}}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, marginBottom: 15, alignItems: 'flex-end' }}>
+                            <MaterialCommunityIcons name="message-reply"
+                                style={{ color: 'white', fontSize: 36 }}
+                            ></MaterialCommunityIcons>
 
-                    </MaterialCommunityIcons>
-                    </TouchableOpacity>
-                </View>
+                            <View style={{ alignItems: 'center' }}>
+                            <TouchableOpacity onPress={this.takePicture.bind(this)} >
+                              <MaterialCommunityIcons name = "circle-outline"style = {{ color: 'white', fontSize: 100}}>
+
+                              </MaterialCommunityIcons>
+                            </TouchableOpacity>
+                                <Icon  onPress={() => { this.toggleModal(); this.getPhotos() }} name="ios-images" style={{ color: 'white', fontSize: 36 }} />
+                                <Modal
+                                animationType={"slide"}
+                                transparent={false}
+                                visible={this.state.modalVisible}
+                                onRequestClose={() => console.log('closed')}
+                              >
+                                <View style={styles.modalContainer}>
+                                  <Button
+                                    title='Close'
+                                    onPress={this.toggleModal}
+                                  />
+                                  <ScrollView
+                                    contentContainerStyle={styles.scrollView}>
+                                    {
+                                      this.state.photos.map((p, i) => {
+                                        return (
+                                          <TouchableHighlight
+                                            style={{opacity: i === this.state.index ? 0.5 : 1}}
+                                            key={i}
+                                            underlayColor='transparent'
+                                            onPress={() => this.setIndex(i)}
+                                          >
+                                            <Image
+                                              style={{
+                                                width: width/3,
+                                                height: width/3
+                                              }}
+                                              source={{uri: p.node.image.uri}}
+                                            />
+                                          </TouchableHighlight>
+                                        )
+                                      })
+                                    }
+                                  </ScrollView>
+                                </View>
+                              </Modal>
+                            </View>
+                            <Icon
+                              onPress={() => {
+                                 this.setState({
+                                     type: this.state.type === Camera.Constants.Type.back ?
+                                       Camera.Constants.Type.front :
+                                       Camera.Constants.Type.back
+                                })
+                              }}
+                              name="ios-reverse-camera" style={{ color: 'white', fontWeight: 'bold', fontSize: 36 }} />
+                        </View>
               </Camera>}
             </View>
           );
         }
       }
-    
+      
       takePicture = async() => {
         if (this.camera) {
           const options = { quality: 0.5, base64: true };
@@ -108,5 +171,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignSelf: 'center',
     margin: 20,
+  },
+  modalContainer: {
+    paddingTop: 20,
+    flex: 1
+  },
+  scrollView: {
+    flexWrap: 'wrap',
+    flexDirection: 'row'
   },
 });

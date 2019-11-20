@@ -5,7 +5,7 @@ import {
     StyleSheet
 } from "react-native";
 import {Icon} from 'native-base';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Polygon} from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 
 class MapTab extends Component{
@@ -16,7 +16,14 @@ class MapTab extends Component{
     }
     state = {
         latitude: null,
-        longitude: null
+        longitude: null,
+        coordinates: [
+            {name: '1', latitude: 28.606242, longitude: -81.206311},
+            {name: '2', latitude: 28.610376, longitude: -81.192297},
+            {name: '3', latitude: 28.604032, longitude: -81.189344},
+            {name: '4', latitude: 28.591729, longitude: -81.194586},
+            {name: '5', latitude: 28.597840, longitude: -81.207318},
+        ]
     }
 
     async componentDidMount() {
@@ -44,7 +51,10 @@ class MapTab extends Component{
                     longitudeDelta: 0.0421
                 }}
                 >
-
+                <Polygon
+                coordinates = {this.state.coordinates}
+                fillColor = {'rgba(100,200,200,0.3)'}
+                />
                 </MapView>
             );
         }
