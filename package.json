@@ -11,7 +11,8 @@
     "server": "nodemon server",
     "client": "cd client && yarn start",
     "dev": "concurrently \"yarn server\" \"yarn run client\"",
-    "preinstall": "cd client && yarn install"
+    "preinstall": "cd client && yarn install",
+    "build": "cd client && npm run build"
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
