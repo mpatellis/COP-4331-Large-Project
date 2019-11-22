@@ -18,7 +18,7 @@ mongoose.set('useNewUrlParser', true)
   .set('useCreateIndex', true)
 
 var url = config.db.url
-
+console.log(url)
 mongoose.Promise = global.Promise
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
