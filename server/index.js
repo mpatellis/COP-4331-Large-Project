@@ -5,6 +5,7 @@ var routes = require('./routes')
 var config = require('../config')
 var swaggerDoc = require('./swaggerDoc')
 
+require('dotenv').config()
 require('./middleware')(app)
 
 app.use(express.static('client/build'))
