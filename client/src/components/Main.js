@@ -1,4 +1,11 @@
 import React from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useRouteMatch,
+  useHistory
+} from 'react-router-dom'
 import PropTypes from 'prop-types';
 import { createMuiTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,6 +15,7 @@ import Link from '@material-ui/core/Link';
 import Navigator from './Navigator';
 import Content from './Content';
 import Header from './Header';
+import Map from './Map'
 
 function Copyright() {
   return (
@@ -144,12 +152,13 @@ const styles = {
   },
   app: {
     flex: 1,
+    // height: '100%',
     display: 'flex',
     flexDirection: 'column',
   },
   main: {
     flex: 1,
-    padding: theme.spacing(6, 4),
+    padding: theme.spacing(.5,.5),
     background: '#eaeff1',
   },
   footer: {
@@ -186,7 +195,16 @@ function Main(props) {
         <div className={classes.app}>
           <Header onDrawerToggle={handleDrawerToggle} />
           <main className={classes.main}>
-            <Content />
+          <Router>
+                <Switch>
+                  <Route exact path="/">
+                    <Content />
+                  </Route>
+                  <Route exact path="/map">
+                    <Map />
+                  </Route>
+                </Switch>
+            </Router>
           </main>
           <footer className={classes.footer}>
             <Copyright />

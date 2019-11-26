@@ -8,6 +8,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Link from '@material-ui/core/Link'
 import HomeIcon from '@material-ui/icons/Home';
 import InfoIcon from '@material-ui/icons/Info';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
@@ -32,7 +33,8 @@ const categories = [
       { id: 'Featured', icon: <StarBorderIcon />, active: true },
       { id: 'Following', icon: <PeopleIcon /> },
       { id: 'New', icon: <NewReleasesIcon /> },
-      { id: 'Search', icon: <SearchIcon /> },
+      { id: 'Search', icon: <SearchIcon />, href: "/"},
+      { id: 'Map', icon: <SearchIcon /> , href: "/map" },
     ],
   },
   {
@@ -103,21 +105,23 @@ function Navigator(props) {
                 {id}
               </ListItemText>
             </ListItem>
-            {children.map(({ id: childId, icon, active }) => (
-              <ListItem
-                key={childId}
-                button
-                className={clsx(classes.item, active && classes.itemActiveItem)}
-              >
-                <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
-                <ListItemText
-                  classes={{
-                    primary: classes.itemPrimary,
-                  }}
-                >
-                  {childId}
-                </ListItemText>
-              </ListItem>
+            {children.map(({ id: childId, icon, active, href  }) => (
+             <Link href={href}>
+             <ListItem
+               key={childId}
+               button
+               className={clsx(classes.item, active && classes.itemActiveItem)}
+             >
+               <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
+               <ListItemText
+                 classes={{
+                   primary: classes.itemPrimary
+                 }}
+               >
+                 {childId}
+               </ListItemText>
+             </ListItem>
+           </Link>
             ))}
 
             <Divider className={classes.divider} />

@@ -11,3 +11,26 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.split-pane {
+  display: flex;
+  flex-direction: column;
+}
+
+.split-pane-left,
+.split-pane-right {
+  flex: 1;
+  overflow: hidden;
+}
+
+.split-pane-left {
+  background: #282c34
+}
+.split-pane-right {
+  background: white
+}
+
+.separator {
+  border: 3px solid #f09713;
+  cursor: col-resize;
+}
