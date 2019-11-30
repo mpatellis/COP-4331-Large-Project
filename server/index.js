@@ -1,16 +1,18 @@
-var express = require('express')
-var mongoose = require('mongoose')
-var app = express()
-var routes = require('./routes')
-var config = require('../config')
-var swaggerDoc = require('./swaggerDoc')
+var express = require('express');
+var mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+var app = express();
+var routes = require('./routes');
+var config = require('../config');
+var swaggerDoc = require('./swaggerDoc');
 
-require('dotenv').config()
+app.use(bodyParser.urlencoded());
+
+require('dotenv').config();
 require('./middleware')(app)
 
-app.use(express.static('client/build'))
+app.use(express.static('client/build'));
 swaggerDoc(app)
-
 app.use(routes())
 
 mongoose.set('useNewUrlParser', true)

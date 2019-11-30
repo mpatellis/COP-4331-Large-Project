@@ -1,20 +1,28 @@
 var Post = require('../../models/post')
 var config = require('../../../config')
 
+const fileUpload = require('express-fileupload');
 
 // TODO
 // Need to add zones and images
+// Need to figure out how to read in form data
+// body-parser, multer, body packages to look at
 exports.addNewPost = (req, res) => {
-  req.body.user_id = req.user._id
-  const newPost = new Post(req.body)
+  console.log(req.body); 
+  // req.body.user_id = req.user._id
+  // let imageFile = req.file;
 
-  newPost.save((err, post) => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.json(post)
-    }
-  })
+  // const newPost = new Post(req.body)
+  // console.log(imageFile);
+  // newPost.save((err, post) => {
+  //   if (err) {
+  //     res.send(err)
+  //   } else {
+  //     res.json(post)
+  //   }
+  // })
+ res.json(req.body);
+  //}
 }
 
 exports.getAll = (req, res) => {
