@@ -2,58 +2,152 @@ import React from 'react'
 import {GoogleMap, withScriptjs, withGoogleMap, Polygon, Polyline} from 'react-google-maps'
 import mapStyles from './mapStyles.json';
 import { compareDesc } from 'date-fns';
+import { async } from 'rxjs/internal/scheduler/async';
+import { tr } from 'date-fns/locale';
 
 const defaultMapOptions = {
   styles: mapStyles
 };
 
 
-
-const Map = withScriptjs(withGoogleMap((props) => { 
-
-    const [cords, setCords] = React.useState([{lat: 28.603425464148174, lng: -81.20161368122865}, {lat: 28.600072094150534, lng: -81.19901730290223}, {lat: 28.601334330248353, lng: -81.19644238224794}, {lat: 28.60459346677067, lng: -81.20030476322938}]);
-
-    function handleClick(event) {
-        var temp = cords
-        if (temp.length == 0 ) {
-            temp.push({ lat: event.latLng.lat(), lng: event.latLng.lng()})
-        } else {
-            var first = temp[0]
-            temp.pop()
-            temp.push({ lat: event.latLng.lat(), lng: event.latLng.lng()})
-            temp.push(first)
+export default (props) => {
+    const {zones, setZones, cords, setCords} = props
+    
+    const Map = withScriptjs(withGoogleMap((props) => { 
+        const [render, setRender]= React.useState(true)
+        const [shiftPressed, setShiftPressed] = React.useState(false)
+        const [escPressed, setEscPressed] = React.useState(false)
+        
+        async function handleClick(event) {
+            if (shiftPressed) {
+            var temp = cords
+    
+            async function setPoint() {
+                temp.push({ lat: event.latLng.lat(), lng: event.latLng.lng()})
+                setCords(temp)
+            }
+    
+            setPoint().then(rerender()).catch()
+            }
         }
-        setCords(temp)
-        console.log(cords)
+    
+        function rerender() {
+            setRender(false)
+            setRender(true)
+        }
+    
+        function keydown(event) {
+            if (event.isComposing || event.keyCode === 229) {
+                return;
+              }
+              console.log(event.key)
+            if (event.key == 'Shift')
+              setShiftPressed(true)
+            if (event.key == 'Escape'){
+                setEscPressed(true)
+                setCords([])
+            }
+            if (event.key == 'Backspace'){
+                var temp = cords
+                temp.pop()
+                setCords(temp)
+                rerender()
+            }
+            if (event.key == 'Enter'){
+                var temp = zones
+                temp.push(cords)
+                setZones(temp)
+                setCords([])
+            }
+        }
+    
+        function keyup(event) {
+            if (event.isComposing || event.keyCode === 229) {
+                return;
+              }
+            if (event.key == 'Shift')
+              setShiftPressed(false)
+            if (event.key == 'Escape')
+              setEscPressed(false)
+        }
+    
+        React.useEffect(() => {
+            document.addEventListener("keydown", keydown);
+            document.addEventListener("keyup", keyup);
+        
+            return () => {
+              document.removeEventListener("keydown", keydown);
+              document.removeEventListener("keyup", keyup);
+            };
+          });
+
+        function NewZone() {
+            return <div>
+            {(cords.length >2) && (render) && !shiftPressed &&
+            <Polygon
+            path={cords}
+            key={1}
+            options={{
+                fillColor: "#000",
+                fillOpacity: 0.4,
+                strokeColor: "#000",
+                strokeOpacity: 1,
+                strokeWeight: 1
+            }}
+            onClick={() => {
+            }}
+            />}
+            {render && shiftPressed &&
+            <Polyline
+            path={cords}
+            key={1}
+            options={{
+                fillColor: "#000",
+                fillOpacity: 0.4,
+                strokeColor: "#000",
+                strokeOpacity: 1,
+                strokeWeight: 1
+            }}
+            onClick={() => {
+            }}/>}</div>
+        }
+
+        function AllZones() {
+            return <div>
+                {(zones.length !=0) && !shiftPressed && zones.map((zone) =>
+                    <Polygon
+                    path={zone}
+                    key={1}
+                    options={{
+                        fillColor: "#000",
+                        fillOpacity: 0.4,
+                        strokeColor: "#000",
+                        strokeOpacity: 1,
+                        strokeWeight: 1
+                    }}
+                    onClick={() => {
+                    }}/>
+                    )}
+            </div>
+        }
+    
+       return ( 
+            <GoogleMap
+                defaultZoom={16}
+                defaultCenter={{lat: 28.602427, lng: -81.200058}}
+                defaultOptions={defaultMapOptions}
+                onClick={(e) => handleClick(e)}
+                // options={{streetViewControl: false}}
+            >
+                <NewZone/>
+                <AllZones/>
+            </GoogleMap>
+       )
     }
-
-   return ( <GoogleMap
-        defaultZoom={16}
-        defaultCenter={{lat: 28.602427, lng: -81.200058}}
-        defaultOptions={defaultMapOptions}
-        onClick={(e) => handleClick(e)}
-        // options={{streetViewControl: false}}
-    >
-        <Polygon
-        path={cords}
-        key={1}
-        options={{
-            fillColor: "#000",
-            fillOpacity: 0.4,
-            strokeColor: "#000",
-            strokeOpacity: 1,
-            strokeWeight: 1
-        }}
-        onClick={() => {
-            console.log("ahmet")
-        }}/>
-    </GoogleMap>
-   )
-}
-))
+    ))
 
 
-const FullMap = (props) => {
+
     return (
         <div style={{width: '100%', height: '100%',  flexGrow: 1} }>
             <Map
@@ -65,5 +159,3 @@ const FullMap = (props) => {
         </div>
     )
 }
-
-export default FullMap
