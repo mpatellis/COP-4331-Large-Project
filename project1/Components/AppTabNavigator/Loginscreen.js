@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions, TextInput,TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TextInput,TouchableOpacity, Button } from 'react-native';
 import Svg, {Image,Circle,ClipPath} from 'react-native-svg';
 import Animated, { Easing } from 'react-native-reanimated';
 import { TapGestureHandler, State } from 'react-native-gesture-handler';
 import { withNavigation } from 'react-navigation';
+import Routes from './Routes';
+
 const { width, height } = Dimensions.get('window');
+
 const {
   Value,
   event,
@@ -57,6 +60,7 @@ class LoginScreen extends Component {
     super();
 
     this.buttonOpacity = new Value(1);
+    this.state = {isHidden: false};
 
     this.onStateChange = event([
       {
@@ -67,7 +71,9 @@ class LoginScreen extends Component {
               set(this.buttonOpacity, runTiming(new Clock(), 1, 0))
             )
           ])
+          
       }
+      
     ]);
     this.onCloseStae = event([
       {
@@ -85,10 +91,20 @@ class LoginScreen extends Component {
       outputRange: [100, 0],
       extrapolate: Extrapolate.CLAMP
     });
+    this.buttonY1 = interpolate(this.buttonOpacity, {
+      inputRange: [0, 1],
+      outputRange: [100, 0],
+      extrapolate: Extrapolate.CLAMP
+    });
 
     this.bgY = interpolate(this.buttonOpacity, {
       inputRange: [0, 1],
-      outputRange: [-height / 3 - 50, 0],
+      outputRange: [-height / 2 - 50, 0],
+      extrapolate: Extrapolate.CLAMP
+    });
+    this.bgY1 = interpolate(this.buttonOpacity, {
+      inputRange: [0, 1],
+      outputRange: [height / 3 + 50, 0],
       extrapolate: Extrapolate.CLAMP
     });
 
@@ -113,6 +129,15 @@ class LoginScreen extends Component {
       extrapolate: Extrapolate.CLAMP
     }); 
   }
+  ToggleFunction = () => {
+
+    this.setState(state => ({
+
+      isHidden: !state.isHidden
+
+    }));
+    
+  };
   render() {
     return (
       <View
@@ -122,25 +147,27 @@ class LoginScreen extends Component {
           justifyContent: 'flex-end'
         }}
       >
+        
         <Animated.View
           style={{
             ...StyleSheet.absoluteFill,
             transform: [{ translateY: this.bgY }]
           }}
         >
-        <Svg height = {height + 50} width = {width}>
-          <ClipPath id = "clip">
-            <Circle r = {height + 50} cx ={width/2} />
-          </ClipPath>
-          <Image
-            href={require('../../assets/bg.jpg')}
-            width = {width} height = {height+50} preserveAspectRatio = "xMidYmid slice"
-            clipPath = "url(#clip)"
-          />
-        </Svg>
+          <Svg height = {height + 50} width = {width}>
+            <ClipPath id = "clip">
+              <Circle r = {height + 50} cx ={width/2} />
+            </ClipPath>
+            <Image
+              href={require('../../assets/bg.jpg')}
+              width = {width} height = {height+50} preserveAspectRatio = "xMidYmid slice"
+              clipPath = "url(#clip)"
+            />
+          </Svg>
         </Animated.View>
+        
         <View style={{ height: height / 3, justifyContent: 'center' }}>
-          <TapGestureHandler onHandlerStateChange={this.onStateChange}>
+          <TapGestureHandler onHandlerStateChange={this.onStateChange} >
             <Animated.View
               style={{
                 ...styles.button,
@@ -148,38 +175,20 @@ class LoginScreen extends Component {
                 transform: [{ translateY: this.buttonY }]
               }}
             >
-              <Text style={{ fontSize: 20, fontWeight: 'bold' }}>SIGN IN</Text>
+              
+              <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Sign In</Text>
             </Animated.View>
           </TapGestureHandler>
-          <Animated.View
-            style={{
-              ...styles.button,
-              backgroundColor: '#2E71DC',
-              opacity: this.buttonOpacity,
-              transform: [{ translateY: this.buttonY }]
-            }}
-          >
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
-              Register
-            </Text>
-          </Animated.View>
-          <Animated.View style = {{zIndex:this.textInputZindex, opacity: this.TextInputOpacity, transform:[{translateY: this.textInputY}],  height:height/ 3, ...StyleSheet.absoluteFill, top:null,justifyContent: 'center'}}> 
-          <TapGestureHandler onHandlerStateChange = {this.onCloseStae}>
-            <Animated.View style = {styles.closeButton}>
-              <Animated.Text style = {{fontSize: 15, transform: [{rotate: concat(this.rotateCross, 'deg')}]}}>
-                X
-              </Animated.Text>
-            </Animated.View>
-          </TapGestureHandler>
-            <TextInput placeholder = "Email"  style = {styles.textInput} placeholderTextColor = "black" />
-            <TextInput placeholder = "password"  style = {styles.textInput} placeholderTextColor = "black" />
-            <TouchableOpacity onPress={() => this.props.navigation.navigate("Home")}>
-            <Animated.View style = {styles.button}>
-              <Text style = {{fontSize: 20, fontWeight: 'bold'}}>
-                SIGN IN
-              </Text>
-          </Animated.View>
-          </TouchableOpacity>
+          <Animated.View style = {{zIndex:this.textInputZindex, opacity: this.TextInputOpacity, transform:[{translateY: this.textInputY}],  height:height/ 2, ...StyleSheet.absoluteFill, top:null,justifyContent: 'center'}}> 
+            <TapGestureHandler onHandlerStateChange = {this.onCloseStae}>
+              <Animated.View style = {styles.closeButton}>
+                <Animated.Text style = {{fontSize: 15, transform: [{rotate: concat(this.rotateCross, 'deg')}]}}>
+                  X
+                </Animated.Text>
+              </Animated.View>
+            </TapGestureHandler>
+            
+            <Routes navigation = {this.props.navigation}/>
           </Animated.View>
         </View>
       </View>
@@ -196,6 +205,18 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: 'white',
+    height: 70,
+    marginHorizontal: 20,
+    borderRadius: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 5,
+    shadowOffset: { width: 2, height:2},
+    shadowColor: 'black',
+    shadowOpacity: 0.2
+  },
+  button1: {
+    backgroundColor: '#000000',
     height: 70,
     marginHorizontal: 20,
     borderRadius: 35,

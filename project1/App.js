@@ -12,6 +12,7 @@ import SearchTab from './Components/AppTabNavigator/SearchTab';
 import MapTab from './Components/AppTabNavigator/MapTab';
 import SettingTab from './Components/AppTabNavigator/SettingTab';
 import Login from './Components/AppTabNavigator/Login';
+import Signup from './Components/AppTabNavigator/Signup';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -64,9 +65,10 @@ const AppNavigator = createStackNavigator({
     }
   }
 });
-const AppSwitchNavigator = createStackNavigator({
+const AppSwitchNavigator = createSwitchNavigator({
   login: {screen:Login},
-  Home: {screen: AppNavigator}
+  Home: {screen: AppNavigator},
+  Signup: {screen: Signup}
 },{
   headerMode: 'none'
 })

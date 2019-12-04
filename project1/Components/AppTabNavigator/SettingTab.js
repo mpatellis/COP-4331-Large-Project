@@ -2,7 +2,9 @@ import React, {Component } from "react";
 import {
     View,
     Text,
-    StyleSheet
+    StyleSheet,
+    TouchableOpacity,
+    TouchableOpacityBase
 } from "react-native";
 import {Icon} from 'native-base'
 
@@ -16,7 +18,9 @@ class SettingTab extends Component{
     render(){
         return (
             <View style = {styles.container}>
-                <Text>SettingTab</Text>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("login")}>
+                <Text style = {{fontSize: 20, fontWeight: 'bold'}}>Logout</Text>
+                </TouchableOpacity>
             </View>
         );
     }

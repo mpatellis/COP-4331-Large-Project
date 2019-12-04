@@ -57,6 +57,28 @@ class AddMediaTab extends Component{
       toggleModal = () => {
         this.setState({ modalVisible: !this.state.modalVisible });
       }
+      share = () => {
+        let result =  this.state.photos[this.state.index].node.image
+        let localUri = result.uri;
+        let filename = localUri.split('/').pop();
+
+        // Infer the type of the image
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+
+        // Upload the image using the fetch and FormData APIs
+        let formData = new FormData();
+        // Assume "photo" is the name of the form field the server expects
+        formData.append('photo', { uri: localUri, name: filename, type });
+
+       /* return await fetch(YOUR_SERVER_URL, {
+          method: 'POST',
+          body: formData,
+          header: {
+            'content-type': 'multipart/form-data',
+          },
+        });*/
+      }
       render() {
         const isFocused = this.props.isFocused;
         const { hasCameraPermission } = this.state;
@@ -121,6 +143,16 @@ class AddMediaTab extends Component{
                                       })
                                     }
                                   </ScrollView>
+                                  {
+                                    this.state.index !== null  && (
+                                      <View style={styles.shareButton}>
+                                        <Button
+                                            title='Share'
+                                            onPress={() => this.props.navigation.navigate("PostImage")}
+                                          />
+                                      </View>
+                                    )
+                                  }
                                 </View>
                               </Modal>
                             </View>
