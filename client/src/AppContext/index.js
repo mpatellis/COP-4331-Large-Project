@@ -6,7 +6,7 @@ import axios from 'axios'
 export const AppContext = React.createContext()
 
 export const AppProvider = props => {
-    const [page, setPage] = React.useState('home')
+    const [page, setPage] = React.useState('login')
 
 
 

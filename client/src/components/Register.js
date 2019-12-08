@@ -15,6 +15,7 @@ import Container from '@material-ui/core/Container'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import axios from 'axios'
+import {AppContext } from '../AppContext' 
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -42,6 +43,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function Login() {
+  const [page, setPage] = React.useContext(AppContext)
+
   const classes = useStyles()
 
   const [username, setUsername] = React.useState('')
@@ -70,6 +73,7 @@ function Login() {
       })
       .then(response => {
         console.log(response)
+        setPage('login')
       })
       .catch(error => {
         console.error(error)

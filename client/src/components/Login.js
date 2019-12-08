@@ -17,6 +17,7 @@ import PropTypes from 'prop-types'
 import axios from 'axios'
 import JWT from 'jwt-client'
 import { useHistory } from 'react-router-dom'
+import {AppContext } from '../AppContext' 
 
 
 const useStyles = makeStyles(theme => ({
@@ -45,11 +46,11 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function Login() {
+  const [page, setPage] = React.useContext(AppContext)
   const classes = useStyles()
 
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
-  const history = useHistory()
 
   const handleUsernameChange = event => {
     setUsername(event.target.value)
@@ -68,7 +69,7 @@ function Login() {
       })
       .then(response => {
         JWT.keep(response.data.token)
-        history.push('/')
+        setPage('home')
       })
       .catch(error => {
         console.error(error)

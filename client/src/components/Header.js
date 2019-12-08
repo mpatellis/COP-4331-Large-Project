@@ -23,6 +23,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import JWT from 'jwt-client'
+import {AppContext } from '../AppContext' 
 
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
@@ -49,6 +50,7 @@ const styles = theme => ({
 });
 
 function Header(props) {
+  const [page, setPage] = React.useContext(AppContext)
   const { classes, onDrawerToggle } = props;
   const [isLogedIn, setIsLogedIn] = React.useState(false)
   const [hasAccount, setHasAccount] = React.useState(true)
@@ -63,6 +65,7 @@ function Header(props) {
 
     const handleLogout = () => {
       JWT.forget()
+      setPage('login')
     }
 
     const open = Boolean(anchorEl);
@@ -114,17 +117,17 @@ function Header(props) {
               >
                 <List component="log">
                   <ListItem button>
-                    <ListItemText primary={<Link href="/login">Login</Link>} />
+                    <ListItemText onClick={e=>{setPage('login')}} primary={<Link>Login</Link>} />
                   </ListItem>
                   <ListItem button>
                     <ListItemText
-                      primary={<Link href="/register">Register</Link>}
+                      primary={<Link onClick={e=>{setPage('register')}} >Register</Link>}
                     />
                   </ListItem>
                   <ListItem button>
                     <ListItemText
                       primary={
-                        <Link onClick={handleLogout} href="/">
+                        <Link onClick={handleLogout}>
                           Logout
                         </Link>
                       }
