@@ -38,8 +38,7 @@ function convertZoneOUT(zone) {
 }
 
 exports.test = (req,res) => {
-    convertZoneIN(req.body[0])
-    console.log(convertZoneIN(req.body[0]))
+    console.log(req)
     return res.status(200).json({ message: 'Success!' })
 }
 
