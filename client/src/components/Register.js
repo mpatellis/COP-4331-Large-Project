@@ -141,7 +141,7 @@ function Login() {
           </Button>
           <Grid container justify="center">
             <Grid item>
-              <Link href="/login" variant="body2">
+              <Link onClick={e=>{setPage('login')}} variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>

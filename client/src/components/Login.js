@@ -127,7 +127,7 @@ function Login() {
               </Link>
             </Grid> */}
             <Grid item>
-              <Link href="/register" variant="body2">
+              <Link onClick={e=>{setPage('register')}} variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
