@@ -1,6 +1,7 @@
 import React, { useState, Children } from "react";
 import styled from "styled-components";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { MapContext } from '../MapContext'
 
 
 const initial = (zones) => Array.from(zones).map(k => {
@@ -61,6 +62,7 @@ const ZoneList = React.memo(function ZoneList({ zones }) {
 });
 
 export default function ZoneApp(props) {
+  const [zones, setZones, cords, setCords, testZones, addZone, editZone, deleteZone, getChildrenZone, getZones] = React.useContext(MapContext)
   const [state, setState] = useState({});
   const [first, setFirst] = useState(true);
   if (first && props.zones) {
@@ -75,6 +77,9 @@ export default function ZoneApp(props) {
         // super simple: just removing the dragging item
         const items = Array.from(state.zones);
         var tmp = items.splice(result.source.index, 1);
+        console.log(result)
+        console.log(tmp)
+        editZone({zone_id: tmp[0].id, parent_zone_id: result.combine.draggableId })
         setState({ zones: items });       
         return;
     }

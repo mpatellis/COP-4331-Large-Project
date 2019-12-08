@@ -8,9 +8,9 @@ const zoneSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'zone',
   },
-  master_zone_id: {
+  owner_id: {
     type: Schema.Types.ObjectId,
-    ref: 'zone',
+    ref: 'user',
   },
   name: {
     type: String,

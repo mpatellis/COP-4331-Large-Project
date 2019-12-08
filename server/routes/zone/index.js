@@ -96,6 +96,9 @@ module.exports = () => {
       *         description: failed.
       */
       .get(loginRequired, controller.zone.getChildren)
+
+    router.route('/owned')
+      .get(loginRequired, controller.zone.getAllOwned)
     
     router.route('/test')
       .post(controller.zone.test)

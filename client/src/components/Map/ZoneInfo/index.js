@@ -98,21 +98,7 @@ function Content(props) {
       </AppBar>
         {renderInfo &&  zones.length != 0 &&
         <Test zones={zones} num={true}></Test>
-          // <GridList cellHeight={50} className={classes.gridList} cols={1}>
-          //   {zones.map(tile => (
-          //     <Grid item style={{ background: tile.color }}>
-          //            <TextField
-          //       fullWidth
-          //       placeholder={tile.color}
-          //       InputProps={{
-          //         disableUnderline: true,
-          //         className: classes.searchInput,
-          //       }}
-          //     />      
-          //   </Grid>
-          //   ))}
-          // </GridList>
-        } 
+        }
     </Paper>
   );
 }

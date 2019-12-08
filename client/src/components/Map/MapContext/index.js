@@ -24,7 +24,7 @@ const getZones = async (zone) => {
     }
     var newZone = zone
     await axios
-        .get(`/zone/`)
+        .get(`/zone/owned`)
         .then(response => { 
             console.log(response.data)
             Res = response.data
@@ -66,6 +66,40 @@ const editZone = async (zone) => {
         })
 }
 
+const deleteZone = async (zone) => {
+    const token = JWT.get()
+    if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    }
+
+    var newZone = zone
+    console.log(newZone)
+    await axios
+        .delete(`/zone/`, { data: newZone})
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+        })
+}
+
+const getChildrenZone = async (zone) => {
+    const token = JWT.get()
+    if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    }
+
+    var newZone = zone
+    console.log(newZone)
+    await axios
+        .get(`/zone/children`, { data: newZone})
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+        })
+}
+
 export const MapContext = React.createContext()
 
 export const MapProvider = props => {
@@ -81,7 +115,7 @@ export const MapProvider = props => {
         var tmp = zones[0]
         tmp.zone_id = tmp._id
         tmp.name = "test"
-        editZone(tmp)
+        getChildrenZone(tmp)
         }
     })
     console.log(process.env)
@@ -89,7 +123,7 @@ export const MapProvider = props => {
 
     return (
         <MapContext.Provider 
-        value={[zones, setZones, cords, setCords, testZones, addZone]}
+        value={[zones, setZones, cords, setCords, testZones, addZone, editZone, deleteZone, getChildrenZone, getZones]}
         >
             {props.children}
         </MapContext.Provider>

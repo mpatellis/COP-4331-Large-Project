@@ -59,7 +59,7 @@
  *          properties:
  *              parent_zone_id:
  *                  type: string
- *              master_zone_id:
+ *              owner_id:
  *                  type: string
  *              name:
  *                  type: string
