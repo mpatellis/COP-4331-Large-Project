@@ -89,19 +89,20 @@ export default (props) => {
                     
                 rerender()
             }
-            if (event.key == 'Enter'){           
-                if (cords.length < 3 && !newZone) {
-                    zones.pop()
-                }
-                setNewZone(true)
-                addZone(zones[zones.length-1]).then(() => {
-                    while (cords.length > 0) {
-                    cords.pop()
+            if (event.key == 'Enter'){  
+                if (!newZone) {
+                    if (cords.length < 3 && !newZone) {
+                        zones.pop()
                     }
-                    rerender()
-                }
-                ).catch()
-                
+                    setNewZone(true)
+                    addZone(zones[zones.length-1]).then(() => {
+                        while (cords.length > 0) {
+                        cords.pop()
+                        }
+                        rerender()
+                    }
+                    ).catch()
+                }    
             }
         }
     

@@ -2,6 +2,8 @@ import React, { useState, Children } from "react";
 import styled from "styled-components";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { MapContext } from '../MapContext'
+import { RIEToggle, RIEInput, RIETextArea, RIENumber, RIETags, RIESelect } from 'riek'
+import _ from 'lodash'
 
 
 const initial = (zones) => Array.from(zones).map(k => {
@@ -47,7 +49,12 @@ function Zone({ zone, index }) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          {zone.content} <div></div>
+          <RIEInput
+          value={zone.content}
+          change={e => {console.log(e)}}
+          propName='name'
+          validate={_.isString}
+          /><div></div>
           Children: {zone.children.length} MasterZone: {(zone.parent_zone_id) ? 'false': 'true'}
         </ZoneItem>
       )}
@@ -70,6 +77,9 @@ export default function ZoneApp(props) {
       setFirst(false)
       console.log("first")
   }
+
+
+  
 
   function onDragEnd(result) {
 
