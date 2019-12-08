@@ -77,10 +77,12 @@ export const MapProvider = props => {
         for (var z in res) {
             zones.push(res[z])
         }
+        if (zones[0]) {
         var tmp = zones[0]
         tmp.zone_id = tmp._id
         tmp.name = "test"
         editZone(tmp)
+        }
     })
     console.log(process.env)
 
