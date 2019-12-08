@@ -4,7 +4,7 @@ import {createAppContainer, createSwitchNavigator, withNavigation } from 'react-
 import {createStackNavigator} from 'react-navigation-stack';
 import {Icon} from 'native-base';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-
+import { Entypo } from '@expo/vector-icons';
 
 import HomeTab from './Components/AppTabNavigator/HomeTab';
 import AddMediaTab from './Components/AppTabNavigator/AddMediaTab';
@@ -13,6 +13,11 @@ import MapTab from './Components/AppTabNavigator/MapTab';
 import SettingTab from './Components/AppTabNavigator/SettingTab';
 import Login from './Components/AppTabNavigator/Login';
 import Signup from './Components/AppTabNavigator/Signup';
+
+const createTabBarIconWrapper = (
+  TabBarIconComponent,
+  defaultProps,
+) => props => <TabBarIconComponent {...defaultProps} color={props.tintColor} />
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -26,16 +31,31 @@ class HomeScreen extends React.Component {
     );
   }
 }
+
 const AppTabNavigator = createBottomTabNavigator({
   
   HomeTab:{
-    screen:HomeTab
+    screen:HomeTab,
+    navigationOptions: {
+      headerLeft:(<Icon name = 'camera'style = {{paddingLeft: 10}}/>),
+      title: "FixThis",
+      headerRight:(<Icon name = 'send'style = {{paddingRight: 10}}/>)
+    }
   },
   SearchTab:{
     screen:SearchTab
   },
   AddMediaTab:{
-    screen: AddMediaTab
+    screen: AddMediaTab,
+    navigationOptions: {
+      header: 'null',
+      tabBarVisible: false,
+      tabBarIcon: createTabBarIconWrapper(Entypo, {
+        name: 'squared-plus',
+        size: 30,
+      })
+    },
+  
   },
   MapTab:{
     screen: MapTab

@@ -1,107 +1,217 @@
 import React, { Component } from 'react';
-//import {connect} from 'react-redux';
 import {
-  TouchableOpacity,
+  Linking,
+  ActivityIndicator,
   View,
+  ScrollView,
   Text,
   StyleSheet,
+  CameraRoll,
+  Image,
+  Dimensions,
+  TouchableHighlight,
+  TouchableOpacity,
+  Platform,
+  Button,
 } from 'react-native';
-import { NavigationActions } from 'react-navigation';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import * as PostActions from '../actions/Post.actions';
-//import {colors} from '../config/Theme';
+import * as Permissions from 'expo-permissions';
 
-//import PostImageComponent from '../components/Post/PostImageComponent';
+const win = Dimensions.get('window');
 
-const ShareImageScreenPointer = {}
-class ShareImageScreen extends Component {
-  static navigationOptions = (props) => ({
-    title: 'Share To',
-    headerBackTitle: 'Back',
-    headerRight: (
-      <TouchableOpacity
-        onPress={() => ShareImageScreenPointer.this.postImage()}
-      >
-        <Text style={styles.nextBtn}>Share</Text>
-      </TouchableOpacity>
-    ),
-    headerLeft: (
-      <MaterialCommunityIcons
-        name="arrow-left"
-        style={styles.backBtn}
-        onPress={() => props.navigation.goBack(null)}
-      />
-    ),
-  });
-
-
-  componentWillMount () {
-    ShareImageScreenPointer.this = this;
-  }
-
+export default class PostImage extends Component {
   state = {
-    caption: ''
+    isMounted: false,
+    photos: [],
+    selectedItem: null,
+    hasCameraRollPermission: null,
   }
 
-  setCaptionHandler = (caption) => {
-    this.setState({caption})
+  constructor(props) {
+    super(props);
   }
 
-  postImage = () => {
-    this.props.postImage({
-      caption: this.state.caption,
-    }).then((result) => {
+  async componentDidMount() {
+    this.setState({isMounted: true});
 
-      const resetAction = NavigationActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({ routeName: 'CreateImage' })],
+    const {status} = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+
+    if (this.state.isMounted) {
+      this.setState({ hasCameraRollPermission: status === 'granted' });
+
+      if (status === 'granted') {
+        this.getPhotos();
+      } else {
+        const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        if (status === 'granted') {
+          this.setState({ hasCameraRollPermission: true });
+          this.getPhotos();
+        }
+      }
+    }
+  }
+
+  componentWillUnmount(){
+    this.setState({isMounted: false})
+  }
+
+  getPhotos = () => {
+    if (this.state.hasCameraRollPermission) {
+      CameraRoll.getPhotos({
+        first: 20,
+        assetType: 'All'
+      })
+      .then(r => {
+        this.processImage(r.edges[0].node.image);
+        this.setState({
+          photos: r.edges,
+          selectedItem: 0,
+        });
       });
-      this.props.navigation.dispatch(resetAction);
+    }
+  }
 
-      if (result) this.props.navigation.navigate('Home');
+  selectItemHandler = (selectedItem = 0) => {
+    this.processImage(this.state.photos[selectedItem].node.image);
+    this.setState({
+      selectedItem,
     });
   }
 
+  processImage = (img) => {
+      // this.props.setImageForPost(img);
+  }
+
   render() {
+    const { photos, selectedItem, hasCameraRollPermission } = this.state;
+
+    if (hasCameraRollPermission === null) {
+      return null;
+    }
+
+    if (hasCameraRollPermission === false) {
+      return (
+        <View
+          style={styles.deniedView}
+        >
+          <Text style={styles.deniedText}>Please enable permissions for accessing your device gallery.</Text>
+        </View>
+      );
+    }
+
+    const renderImages = photos.map( (image, index) => {
+      const uri = image.node.image.uri;
+
+      return (
+        <TouchableHighlight
+          key={index}
+          style={styles.selectedItemBtn}
+          onPress={() => this.selectItemHandler(index)}
+        >
+          <Image
+            style={styles.galleryImage}
+            source={{uri}}
+          />
+        </TouchableHighlight>
+      )
+    })
 
     return (
-      <View style={styles.container}>
+      <View
+        style={styles.container}
+      >
 
-        <PostImageComponent
-          image={this.props.image}
-          caption={this.state.caption}
-          setCaptionHandler={ text => this.setCaptionHandler(text)}
-        />
+        <View style={styles.selectedItemView}>
+          {selectedItem === null &&
+            <ActivityIndicator
+              style={styles.loader}
+              size="large"
+            />
+          }
+          {selectedItem !== null &&
+              <Image
+                style={styles.selectedItem}
+                source={{uri: photos[selectedItem].node.image.uri}}
+              />
+          }
+        </View>
 
+        <ScrollView>
+          <View style={styles.gallery}>
+            {renderImages}
+          </View>
+        </ScrollView>
+        {
+            this.state.index !== null  && (
+             <View style={styles.shareButton}>
+              <Button
+                title='Share'
+                 onPress={() => this.props.navigation.navigate("PostImageScreen",{image: photos[selectedItem].node.image})}
+                 />
+            </View>
+             )
+         }
       </View>
     );
   }
 }
 
+const galleryItemSize = (win.width / 4) - 2;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
   },
-  nextBtn: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    paddingHorizontal: 10,
-    color: colors.anchor,
+  gallery: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 1,
+    flex: 1,
   },
-  backBtn: {
-    color: colors.textColor,
-    marginLeft: 10,
-    fontSize: 30,
+  galleryImage: {
+    height: galleryItemSize,
+    width: galleryItemSize,
+    alignSelf: 'stretch',
+  },
+  selectedItemView: {
+    width: win.width,
+    height: win.width,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  selectedItem: {
+    width: win.width,
+    height: win.width,
+    alignSelf: 'stretch',
+  },
+  selectedItemBtn: {
+    margin: 1,
+  },
+  loader: {
+    position: 'absolute',
+    zIndex: 3,
+  },
+  avatarMast: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    width: win.width,
+    height: win.width,
+    alignSelf: 'stretch',
+    zIndex: 2,
+    opacity: .5,
+  },
+  deniedView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  deniedText: {
+    fontSize: 16,
+  },
+  openSettings: {
+    marginTop: 20,
+  },
+  openSettingsText: {
+    fontSize: 16,
   }
 });
-
-const mapStateToProps = (state) => ({
-  image: state.post.imageForPost,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  postImage: (details) => dispatch(PostActions.postImage(details)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ShareImageScreen);
