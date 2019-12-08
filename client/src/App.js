@@ -2,6 +2,7 @@ import React from 'react'
 import Main from './components/Main'
 import axios from 'axios'
 import JWT from 'jwt-client'
+import {AppProvider} from './AppContext'
 
 const token = JWT.get()
 
@@ -10,7 +11,11 @@ if (token) {
 }
 
 function App() {
-  return <Main />
+  return (
+    <AppProvider>
+      <Main />
+      </AppProvider>
+  )
 }
 
 export default App

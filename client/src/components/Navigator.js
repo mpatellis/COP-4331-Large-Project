@@ -25,6 +25,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
 import logo from './imgs/FixThisLogoSimple.png'; 
+import {AppContext } from '../AppContext' 
+
 
 const categories = [
   {
@@ -33,8 +35,8 @@ const categories = [
       { id: 'Featured', icon: <StarBorderIcon />, active: true },
       { id: 'Following', icon: <PeopleIcon /> },
       { id: 'New', icon: <NewReleasesIcon /> },
-      { id: 'Search', icon: <SearchIcon />, href: "/"},
-      { id: 'Map', icon: <SearchIcon /> , href: "/map" },
+      { id: 'Search', icon: <SearchIcon />, pageName: "home"},
+      { id: 'Map', icon: <SearchIcon /> , pageName: "map" },
     ],
   },
   {
@@ -86,6 +88,7 @@ const styles = theme => ({
 });
 
 function Navigator(props) {
+const [page, setPage] = React.useContext(AppContext)
   const { classes, ...other } = props;
 
   return (
@@ -105,12 +108,12 @@ function Navigator(props) {
                 {id}
               </ListItemText>
             </ListItem>
-            {children.map(({ id: childId, icon, active, href  }) => (
-             <Link href={href}>
+            {children.map(({ id: childId, icon, active, pageName  }) => (
              <ListItem
                key={childId}
                button
                className={clsx(classes.item, active && classes.itemActiveItem)}
+               onClick={ e => {setPage(pageName)}}
              >
                <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
                <ListItemText
@@ -121,7 +124,6 @@ function Navigator(props) {
                  {childId}
                </ListItemText>
              </ListItem>
-           </Link>
             ))}
 
             <Divider className={classes.divider} />
