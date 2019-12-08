@@ -16,11 +16,13 @@ app.use(routes())
 mongoose.set('useNewUrlParser', true)
   .set('useFindAndModify', false)
   .set('useCreateIndex', true)
-
 var url = config.db.url
 console.log(url)
 mongoose.Promise = global.Promise
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+
+// Uncomment to hard reset Database
+//mongoose.connection.dropDatabase()
 
 const PORT = config.port
 

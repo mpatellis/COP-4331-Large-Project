@@ -1,24 +1,23 @@
 import React from 'react'
 import MapComponent from './MapComponent'
 import SplitPane from '../SplitPane'
-import MapData from './MapData'
-
+import { MapProvider } from './MapContext'
+import ZoneInfo from './ZoneInfo'
 
 
 
 export default () => {
-    const [zones, setZones] = React.useState([])
-    const [cords, setCords] = React.useState([]);
+
     
     function Left() {
-        return <MapComponent zones={zones} setZones={setZones}
-                            cords={cords} setCords={setCords}/>
+        return <MapComponent />
     }
     function Right() {
-        return <MapData zones={zones} setZones={setZones}
-                    cords={cords} setCords={setCords}/>
+        return <ZoneInfo/>
     }
 return (
+    <MapProvider>
     <SplitPane Left={Left} Right={Right}/>
+    </MapProvider>
 )
 }

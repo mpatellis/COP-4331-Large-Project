@@ -15,6 +15,10 @@
     "build": "cd client && npm run build"
   },
   "dependencies": {
+    "@atlaskit/button": "^13.3.4",
+    "@atlaskit/icon": "^19.0.11",
+    "@atlaskit/navigation": "^35.2.6",
+    "@atlaskit/tree": "^7.0.2",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "concurrently": "^5.0.0",
@@ -25,10 +29,12 @@
     "mongodb": "^3.3.2",
     "mongoose": "^5.7.5",
     "react-split-pane": "^0.1.89",
+    "styled-components": "^4.4.1",
     "swagger-jsdoc": "^3.4.0",
     "swagger-ui-express": "^4.1.2"
   },
   "devDependencies": {
-    "nodemon": "^1.19.3"
+    "nodemon": "^1.19.3",
+    "riek": "^1.1.0"
   }
 }

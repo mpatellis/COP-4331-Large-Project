@@ -16,6 +16,9 @@ const zoneSchema = new Schema({
     type: String,
     required: true
   },
+  color: {
+    type: String,
+  },
   location: {
     type: location.polygonSchema,
     required: true

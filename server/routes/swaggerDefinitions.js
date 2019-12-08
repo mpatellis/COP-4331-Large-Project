@@ -63,8 +63,21 @@
  *                  type: string
  *              name:
  *                  type: string
- *              location:
- *                  $ref: "#/definitions/Polygon"
+ *              coords:
+ *                  $ref: "#/definitions/Coords"
+ *                  
+ *      Coords:
+ *          type: array
+ *          items:
+ *              required:
+ *                  - lat
+ *                  - lng
+ *              properties:
+ *                  lat:
+ *                      type: number
+ *                  lng:
+ *                      type: number
+ *          
  *      Polygon:
  *          required:
  *              - coordinates

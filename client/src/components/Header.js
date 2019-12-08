@@ -22,6 +22,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import JWT from 'jwt-client'
 
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
@@ -59,6 +60,11 @@ function Header(props) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleLogout = () => {
+      JWT.forget()
+    }
+
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
@@ -107,12 +113,23 @@ function Header(props) {
                 }}
               >
                 <List component="log">
-                      <ListItem button>
-                        <ListItemText primary="Log In" />
-                      </ListItem>
-                      <ListItem button>
-                        <ListItemText primary="Sign Up" />
-                      </ListItem>
+                  <ListItem button>
+                    <ListItemText primary={<Link href="/login">Login</Link>} />
+                  </ListItem>
+                  <ListItem button>
+                    <ListItemText
+                      primary={<Link href="/register">Register</Link>}
+                    />
+                  </ListItem>
+                  <ListItem button>
+                    <ListItemText
+                      primary={
+                        <Link onClick={handleLogout} href="/">
+                          Logout
+                        </Link>
+                      }
+                    />
+                  </ListItem>
                 </List>
               </Popover>
             </Grid>

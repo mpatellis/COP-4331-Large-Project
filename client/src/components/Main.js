@@ -16,6 +16,8 @@ import Navigator from './Navigator';
 import Content from './Content';
 import Header from './Header';
 import Map from './Map'
+import Login from './Login'
+import Register from './Register'
 
 function Copyright() {
   return (
@@ -152,12 +154,12 @@ const styles = {
   },
   app: {
     flex: 1,
-    // height: '100%',
     display: 'flex',
     flexDirection: 'column',
   },
   main: {
     flex: 1,
+    maxHeight: '100vh',
     padding: theme.spacing(.5,.5),
     background: '#eaeff1',
   },
@@ -202,6 +204,12 @@ function Main(props) {
                   </Route>
                   <Route exact path="/map">
                     <Map />
+                  </Route>
+                  <Route exact path="/login">
+                    <Login />
+                  </Route>
+                  <Route exact path="/register">
+                    <Register />
                   </Route>
                 </Switch>
             </Router>
