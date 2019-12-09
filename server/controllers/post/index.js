@@ -20,6 +20,7 @@ const s3 = new AWS.S3({
 
 // Images are saved in s3 by the post _id
 exports.addNewPost = (req, res) => {
+  console.log(req)
   req.body.user_id = req.user._id
   let imageFile = req.files.file;
   const newPost = new Post(req.body)
