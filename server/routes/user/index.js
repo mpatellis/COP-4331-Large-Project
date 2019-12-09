@@ -75,18 +75,18 @@ module.exports = () => {
     *   get:
     *     tags: [user]
     *     summary: get logged in user
-    *     description: login user returns JWT
+    *     description: return user info
     *     security:
     *       - BearerAuth: []
     *     responses:
     *       200:
-    *         description: login succesfull.
+    *         description: retrieval succesfull.
     *         schema:
     *           properties:
     *             token:
     *               type: string
     *       401:
-    *         description: login failed.
+    *         description: retrieval failed.
     */
     .get(loginRequired, controller.user.getById)
 
@@ -110,7 +110,7 @@ module.exports = () => {
     *       200:
     *         description: update succesfull.
     *       401:
-    *         description: ubdate failed.
+    *         description: update failed.
     */
     .put(loginRequired, controller.user.updateById)
 

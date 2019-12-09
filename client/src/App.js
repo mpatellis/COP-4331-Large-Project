@@ -1,17 +1,21 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import React from 'react'
 import Main from './components/Main'
+import axios from 'axios'
+import JWT from 'jwt-client'
+import {AppProvider} from './AppContext'
 
-class App extends Component {
-  render() {
-    return (
-      <Router>
-        <div className="App">
-          <Route exact path="/" component={Main} />
-        </div>
-      </Router>
-    );
-  }
+const token = JWT.get()
+
+if (token) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 }
 
-export default App;
+function App() {
+  return (
+    <AppProvider>
+      <Main />
+      </AppProvider>
+  )
+}
+
+export default App

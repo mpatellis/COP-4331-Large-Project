@@ -5,11 +5,13 @@ const Schema = mongoose.Schema
 const voteSchema = new Schema({
   user_id: {
     type: Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'user',
+    required: true
   },
   post_id: {
     type: Schema.Types.ObjectId,
-    ref: 'post'
+    ref: 'post',
+    required: true
   },
   up_vote: {
     type: Boolean,

@@ -6,7 +6,7 @@ exports.pointSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: ['Point'],
-    required: true
+    default: 'Point'
   },
   coordinates: {
     type: [Number],
@@ -18,7 +18,7 @@ exports.polygonSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: ['Polygon'],
-    required: true
+    default: 'Polygon'
   },
   coordinates: {
     type: [[[Number]]],

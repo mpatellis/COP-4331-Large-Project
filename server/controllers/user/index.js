@@ -11,7 +11,7 @@ exports.register = (req, res) => { // :)
     if (err) {
       return res.status(400).json({ message: 'User could not be created' })
     } else {
-      return res.status(204).json({ message: 'User succesfully created' })
+      return res.status(200).json({ message: 'User succesfully created' })
     }
   })
 }
@@ -33,6 +33,7 @@ exports.loginRequired = (req, res, next) => { // :)
   if (req.user) {
     next()
   } else {
+    console.log("____-")
     return res.status(401).json({ message: 'Unauthorized user!' })
   }
 }

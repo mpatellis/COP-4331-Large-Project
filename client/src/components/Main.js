@@ -1,4 +1,11 @@
 import React from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useRouteMatch,
+  useHistory
+} from 'react-router-dom'
 import PropTypes from 'prop-types';
 import { createMuiTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,7 +15,10 @@ import Link from '@material-ui/core/Link';
 import Navigator from './Navigator';
 import Content from './Content';
 import Header from './Header';
-
+import Map from './Map'
+import Login from './Login'
+import Register from './Register'
+import {AppContext } from '../AppContext' 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -149,7 +159,8 @@ const styles = {
   },
   main: {
     flex: 1,
-    padding: theme.spacing(6, 4),
+    maxHeight: '100vh',
+    padding: theme.spacing(.5,.5),
     background: '#eaeff1',
   },
   footer: {
@@ -160,6 +171,7 @@ const styles = {
 
 function Main(props) {
   const { classes } = props;
+  const [page, setPage] = React.useContext(AppContext)
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -186,7 +198,10 @@ function Main(props) {
         <div className={classes.app}>
           <Header onDrawerToggle={handleDrawerToggle} />
           <main className={classes.main}>
-            <Content />
+          {(page == 'map') && <Map /> }
+          {(page == 'login') && <Login/>}
+          {(page == 'register') && <Register/>}
+           {(page == 'home') && <Content />}
           </main>
           <footer className={classes.footer}>
             <Copyright />

@@ -1,4 +1,5 @@
 var _ = require('lodash')
+require('dotenv').config()
 
 var config = {
   dev: 'development',
