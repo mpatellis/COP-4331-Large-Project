@@ -80,12 +80,14 @@ export default (props) => {
             }
             if (event.key == 'Backspace'){
                 cords.pop()
-                zones[zones.length-1].coords = cords.slice(0)
-                // zones[zones.length-1].coords.push(cords)
-                if (cords.length == 0 && !newZone) {
-                    zones.pop()
-                    setNewZone(true)
+                if (!newZone) {
+                    zones[zones.length-1].coords = cords.slice(0)
+                    if (cords.length == 0) {
+                        zones.pop()
+                        setNewZone(true)
+                    }
                 }
+                
                     
                 rerender()
             }

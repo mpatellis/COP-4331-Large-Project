@@ -60,6 +60,7 @@ exports.getAll = (req, res) => {
 exports.getAllOwned = (req, res) => {
     Super_admin.find({user_id: req.user._id}, (err, master) => {
         if (err) return res.send(err)
+        if (master == null || master.length == 0) return res.send(master)
         var tmp = master.map((item => {return {_id: item.zone_id}}))
         Zone.find().or(tmp)
         .then((zones) => {
