@@ -4,7 +4,25 @@ import { MapContext } from '../../MapContext'
 
 export default (props) => {
     const [zones, setZones, cords, setCords] = React.useContext(MapContext)
-    console.log(zones)
+    const [renderInfo, setRenderInfo] = React.useState(true)
+    var tmpZone = zones.slice(0)
+    function rerenderInfo() {
+        setRenderInfo(false)
+        setRenderInfo(true)
+    }
+
+    React.useEffect(() => {
+        const intervalId = setInterval(() => {  
+          if (JSON.stringify(tmpZone)!=JSON.stringify(zones)) {
+            rerenderInfo()
+            tmpZone = zones.slice(0)
+          }
+            
+        }, 500)
+      
+        return () => clearInterval(intervalId);
+      
+      })
 
     return <div>
         {(zones.length !=0) && zones.map((zone) =>

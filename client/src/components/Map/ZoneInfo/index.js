@@ -64,7 +64,7 @@ function Content(props) {
         tmpZone = zones.slice(0)
       }
         
-    }, 1000)
+    }, 500)
   
     return () => clearInterval(intervalId);
   
