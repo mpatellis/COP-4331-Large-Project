@@ -1,9 +1,12 @@
 import React from 'react'
-import {GoogleMap, withScriptjs, withGoogleMap, Polygon, Polyline} from 'react-google-maps'
+import {GoogleMap, withScriptjs, withGoogleMap, Polygon, Polyline, Marker} from 'react-google-maps'
 import mapStyles from './mapStyles.json';
 import { compareDesc } from 'date-fns';
 import { async } from 'rxjs/internal/scheduler/async';
 import { tr } from 'date-fns/locale';
+import { MapContext } from '../MapContext'
+import AllZones from './AllZones'
+import NewZoneTemplate from './zoneTemplate'
 
 const defaultMapOptions = {
   styles: mapStyles
@@ -11,23 +14,44 @@ const defaultMapOptions = {
 
 
 export default (props) => {
-    const {zones, setZones, cords, setCords} = props
+    const [zones, setZones, cords, setCords, testZones, addZone] = React.useContext(MapContext)
+
     
     const Map = withScriptjs(withGoogleMap((props) => { 
         const [render, setRender]= React.useState(true)
         const [shiftPressed, setShiftPressed] = React.useState(false)
         const [escPressed, setEscPressed] = React.useState(false)
+        const [newZone ,setNewZone] = React.useState(true)
         
         async function handleClick(event) {
             if (shiftPressed) {
-            var temp = cords
+
     
             async function setPoint() {
-                temp.push({ lat: event.latLng.lat(), lng: event.latLng.lng()})
-                setCords(temp)
+                cords.push({ lat: event.latLng.lat(), lng: event.latLng.lng()})
+                if (newZone) {
+                    zones.push(NewZoneTemplate())
+                    setNewZone(false)
+                }
+                zones[zones.length-1].coords.push({ lat: event.latLng.lat(), lng: event.latLng.lng()})
+                console.log(cords)
+                console.log(zones)
             }
     
             setPoint().then(rerender()).catch()
+            }
+        }
+
+
+        function handleMouseMove (event) {
+            if(!newZone) {
+                if (zones[zones.length-1].coords.length < cords.length) {
+                    cords.pop()
+                }
+                cords.push({ lat: event.latLng.lat(), lng: event.latLng.lng()})
+            }
+            if(shiftPressed) {
+                rerender()
             }
         }
     
@@ -44,20 +68,41 @@ export default (props) => {
             if (event.key == 'Shift')
               setShiftPressed(true)
             if (event.key == 'Escape'){
-                setEscPressed(true)
-                setCords([])
+                if (!newZone) {
+                    setEscPressed(true)
+                    while (cords.length > 0) {
+                        cords.pop()
+                    }
+                    zones.pop()
+                    setNewZone(true) 
+                }
+                
             }
             if (event.key == 'Backspace'){
-                var temp = cords
-                temp.pop()
-                setCords(temp)
+                cords.pop()
+                zones[zones.length-1].coords = cords.slice(0)
+                // zones[zones.length-1].coords.push(cords)
+                if (cords.length == 0 && !newZone) {
+                    zones.pop()
+                    setNewZone(true)
+                }
+                    
                 rerender()
             }
-            if (event.key == 'Enter'){
-                var temp = zones
-                temp.push(cords)
-                setZones(temp)
-                setCords([])
+            if (event.key == 'Enter'){  
+                if (!newZone) {
+                    if (cords.length < 3 && !newZone) {
+                        zones.pop()
+                    }
+                    setNewZone(true)
+                    addZone(zones[zones.length-1]).then(() => {
+                        while (cords.length > 0) {
+                        cords.pop()
+                        }
+                        rerender()
+                    }
+                    ).catch()
+                }    
             }
         }
     
@@ -83,21 +128,7 @@ export default (props) => {
 
         function NewZone() {
             return <div>
-            {(cords.length >2) && (render) && !shiftPressed &&
-            <Polygon
-            path={cords}
-            key={1}
-            options={{
-                fillColor: "#000",
-                fillOpacity: 0.4,
-                strokeColor: "#000",
-                strokeOpacity: 1,
-                strokeWeight: 1
-            }}
-            onClick={() => {
-            }}
-            />}
-            {render && shiftPressed &&
+            {cords.length > 1 &&render && shiftPressed &&
             <Polyline
             path={cords}
             key={1}
@@ -109,25 +140,7 @@ export default (props) => {
                 strokeWeight: 1
             }}
             onClick={() => {
-            }}/>}</div>
-        }
-
-        function AllZones() {
-            return <div>
-                {(zones.length !=0) && !shiftPressed && zones.map((zone) =>
-                    <Polygon
-                    path={zone}
-                    key={1}
-                    options={{
-                        fillColor: "#000",
-                        fillOpacity: 0.4,
-                        strokeColor: "#000",
-                        strokeOpacity: 1,
-                        strokeWeight: 1
-                    }}
-                    onClick={() => {
-                    }}/>
-                    )}
+            }}/>}
             </div>
         }
     
@@ -137,10 +150,11 @@ export default (props) => {
                 defaultCenter={{lat: 28.602427, lng: -81.200058}}
                 defaultOptions={defaultMapOptions}
                 onClick={(e) => handleClick(e)}
+                // onMouseMove={(e) => handleMouseMove(e)}
                 // options={{streetViewControl: false}}
             >
                 <NewZone/>
-                <AllZones/>
+                {!shiftPressed && render && <AllZones/> }
             </GoogleMap>
        )
     }

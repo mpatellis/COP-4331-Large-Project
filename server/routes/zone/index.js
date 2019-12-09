@@ -44,7 +44,7 @@ module.exports = () => {
       /**
       * @swagger
       * /zone:
-      *   post:
+      *   delete:
       *     tags: [zone]
       *     summary: delete zone
       *     description: deletes zone if it has no children
@@ -67,6 +67,8 @@ module.exports = () => {
       *         description: failed.
       */
       .delete(loginRequired,controller.zone.deleateZone)
+
+      .patch(loginRequired, controller.zone.updateById)
     router.route('/children')
       /**
       * @swagger
@@ -94,6 +96,12 @@ module.exports = () => {
       *         description: failed.
       */
       .get(loginRequired, controller.zone.getChildren)
+
+    router.route('/owned')
+      .get(loginRequired, controller.zone.getAllOwned)
+    
+    router.route('/test')
+      .post(controller.zone.test)
 
     return router
 }

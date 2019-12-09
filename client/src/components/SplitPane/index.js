@@ -47,7 +47,7 @@ export default (props) => {
             return;
           }    
           
-          leftRef.current.style.width = `${leftWidth}px`;
+          leftRef.current.style.width = `${leftWidth/document.documentElement.clientWidth*100}%`;
         }, [leftWidth]);
       
         return <div  ref={leftRef} style={{width: '80%', height: '100%', background: '#dddddd', float:'left', flexGrow: 1}}>
@@ -58,13 +58,10 @@ export default (props) => {
     
 
 return (
-    <div style={{width: '100%', height: '100%',  flexGrow: 1} }>
+    <div style={{width: '100%', height: '82vh', maxHeight: '100%',  flexGrow: 1} }>
         <LeftSide/>
         <div className="separator" onMouseDown={onMouseDown}  style={{float:'left', height: '100%'}}/>
-
-        <div overflow={'hidden'} style={{ height: '100%', background: '#dddddd', flexGrow: 1}}>
-            <Right/>
-        </div>
+        <Right/>
     </div>
 )
 }

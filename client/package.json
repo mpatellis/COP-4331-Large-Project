@@ -12,8 +12,11 @@
     "react-dom": "^16.10.2",
     "react-google-maps": "^9.4.5",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "react-sortable-tree": "^2.7.1",
+    "react-sortable-tree-theme-minimal": "^0.0.14"
   },
+  "proxy": "http://localhost:80",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

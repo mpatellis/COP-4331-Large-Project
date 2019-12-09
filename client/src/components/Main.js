@@ -16,7 +16,9 @@ import Navigator from './Navigator';
 import Content from './Content';
 import Header from './Header';
 import Map from './Map'
-
+import Login from './Login'
+import Register from './Register'
+import {AppContext } from '../AppContext' 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -152,12 +154,12 @@ const styles = {
   },
   app: {
     flex: 1,
-    // height: '100%',
     display: 'flex',
     flexDirection: 'column',
   },
   main: {
     flex: 1,
+    maxHeight: '100vh',
     padding: theme.spacing(.5,.5),
     background: '#eaeff1',
   },
@@ -169,6 +171,7 @@ const styles = {
 
 function Main(props) {
   const { classes } = props;
+  const [page, setPage] = React.useContext(AppContext)
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -195,16 +198,10 @@ function Main(props) {
         <div className={classes.app}>
           <Header onDrawerToggle={handleDrawerToggle} />
           <main className={classes.main}>
-          <Router>
-                <Switch>
-                  <Route exact path="/">
-                    <Content />
-                  </Route>
-                  <Route exact path="/map">
-                    <Map />
-                  </Route>
-                </Switch>
-            </Router>
+          {(page == 'map') && <Map /> }
+          {(page == 'login') && <Login/>}
+          {(page == 'register') && <Register/>}
+           {(page == 'home') && <Content />}
           </main>
           <footer className={classes.footer}>
             <Copyright />
