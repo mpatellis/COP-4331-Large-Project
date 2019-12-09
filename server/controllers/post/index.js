@@ -70,6 +70,9 @@ exports.addNewPost = (req, res) => {
     }
   }
 
+  // returns json reply
+  // reply.body will have all teh post text data
+  // reply.url will have the url to download the picture
   exports.getById = (req, res) => { // :)
     Post.findById(req.params.postId, (err, post) => {
       if (err) {
@@ -79,19 +82,19 @@ exports.addNewPost = (req, res) => {
       } else if (post.user_id == req.user._id) {
         // Defining what we need from S3
         let filename = req.params.postId + '.jpg';
-        const params = {
+        const signedUrlExpireSeconds = 60 * 5
+        const url = s3.getSignedUrl('getObject', {
           Bucket: 'fix-this',
           Key: filename,
+          Expires: signedUrlExpireSeconds
+        })
+        console.log(post)
+        const reply = {
+          url: url,
+          body: post
         };
 
-        s3.getObject(params, function(err, data) {
-          if (err) {
-            throw err;
-          } else {
-            // What next for file?
-          }
-        })
-        res.json(post)
+        res.json(reply);
       } else {
         return res.status(401).json({ message: 'Unauthorized user!' })
       }
