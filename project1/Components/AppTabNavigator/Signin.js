@@ -6,6 +6,7 @@ import {
     TextInput,
     TouchableOpacity,
     Dimensions,
+    Alert
 } from "react-native";
 import Animated, { Easing } from 'react-native-reanimated';
 import {Actions } from 'react-native-router-flux';
@@ -19,67 +20,38 @@ export default class Signin extends React.Component {
     password: '',
     auth_token: ''
   }
-  handleSubmit = event => {
-    event.preventDefault()
-    axios
-      .post('/user/login', {
-        username: this.state.username,
-        password: this.state.password
-      })
-      .then(response => {
-        JWT.keep(response.data.token)
-        setPage('home')
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }
- /* constructor(props){
-    super(props);
-    this.state ={ isLoading: true}
-  }
-
-  componentDidMount(){
-    return fetch('http://192.168.1.70/user/login', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: this.state.username,
-        password: this.state.password
-      }),
-    })
-    .then((response) => 
-    {
-      if (response.status == 200)
-      {
-        console.log("it work") 
-      } else {
-        console.log("it not work")
+  Login = async () => {
+    fetch('https://fix-this.herokuapp.com/user/login', {
+          method: 'post',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              "username": this.state.username,
+              "password": this.state.password
+          
+          })
+        }).then((response) => response.json())
+        .then((res) => {
+      if(typeof(res.message) != "undefined"){
+       Alert.alert("Error", "Error: "+ res.message);
       }
-      response.json()
-    })
-    .then((responseJson) => {
-        this.setState({
-          isLoading: false,
-          dataSource: "login maybe",
-        }, function(){
+      else{
+        this.setState({ auth_token: res.auth_token });
+        Alert.alert("Welcome", " You have succesfully logged in");
+        this.props.navigation.navigate("Home")
+        }
+     }).catch((error) => {
+         console.error(error);
         });
-
-    })
-    .catch((error) =>{
-      console.error(error);
-    });
-  }*/
-
+  }
   render() {
       return(
         <View style = {styles.container}>
         <TextInput placeholder = "Username" onChangeText={ TextInputValue => this.setState({username : TextInputValue }) } style = {styles.textInput} placeholderTextColor = "black" />
-            <TextInput placeholder = "password" onChangeText={ TextInputValue => this.setState({password : TextInputValue }) } style = {styles.textInput} placeholderTextColor = "black" />
-            <TouchableOpacity onPress={this.handleSubmit}>
+            <TextInput secureTextEntry={true} placeholder = "password" onChangeText={ TextInputValue => this.setState({password : TextInputValue }) } style = {styles.textInput} placeholderTextColor = "black" />
+            <TouchableOpacity onPress={this.Login}>
             <Animated.View style = {styles.button1}>
               <Text style = {{fontSize: 20, fontWeight: 'bold',color: 'white'}}>
                 SIGN IN
