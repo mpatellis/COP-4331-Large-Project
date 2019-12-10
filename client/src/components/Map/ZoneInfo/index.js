@@ -47,7 +47,7 @@ const styles = theme => ({
 
 function Content(props) {
   const { classes } = props;
-  const [zones, setZones, cords, setCords, testZones] = React.useContext(MapContext)
+  const [zones, setZones, cords, setCords, parentZone, setParentZone] = React.useContext(MapContext)
   const [editable, setEditable] = React.useState(false)
   const [renderInfo, setRenderInfo] = React.useState(true)
   var tmpZone = zones.slice(0)

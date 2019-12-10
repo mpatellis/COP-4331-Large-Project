@@ -26,7 +26,7 @@ function convertZoneOUT(zone) {
                 public: zone[z].public,
                 color: zone[z].color,
                 coords: [],
-                childern: []
+                children: []
             }
             for (var e in zone[z].location.coordinates[0]) {
                 newZone.coords[e] = {lat: zone[z].location.coordinates[0][e][0], lng: zone[z].location.coordinates[0][e][1]  }
@@ -139,7 +139,8 @@ exports.deleateZone = (req, res) => {
  * get child zones
  */
 exports.getChildren = (req, res) => {
-    Zone.find({parent_zone_id: req.body.zone_id}, (err, childern) => {
+    console.log(req.query)
+    Zone.find({parent_zone_id: req.query.zone_id}, (err, childern) => {
         if (err) return res.send(err)
         return res.send(convertZoneOUT(childern))
     })

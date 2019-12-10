@@ -3,7 +3,7 @@ import {GoogleMap, withScriptjs, withGoogleMap, Polygon, Polyline} from 'react-g
 import { MapContext } from '../../MapContext'
 
 export default (props) => {
-    const [zones, setZones, cords, setCords] = React.useContext(MapContext)
+    const [zones, setZones, cords, setCords, parentZone, setParentZone] = React.useContext(MapContext)
     const [renderInfo, setRenderInfo] = React.useState(true)
     var tmpZone = zones.slice(0)
     function rerenderInfo() {

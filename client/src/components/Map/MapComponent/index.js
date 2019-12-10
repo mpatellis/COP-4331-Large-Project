@@ -7,6 +7,7 @@ import { tr } from 'date-fns/locale';
 import { MapContext } from '../MapContext'
 import AllZones from './AllZones'
 import NewZoneTemplate from './zoneTemplate'
+import {addZone} from '../ZoneRoutes'
 
 const defaultMapOptions = {
   styles: mapStyles
@@ -14,7 +15,7 @@ const defaultMapOptions = {
 
 
 export default (props) => {
-    const [zones, setZones, cords, setCords, testZones, addZone] = React.useContext(MapContext)
+    const [zones, setZones, cords, setCords, parentZone, setParentZone] = React.useContext(MapContext)
 
     
     const Map = withScriptjs(withGoogleMap((props) => { 
@@ -22,6 +23,7 @@ export default (props) => {
         const [shiftPressed, setShiftPressed] = React.useState(false)
         const [escPressed, setEscPressed] = React.useState(false)
         const [newZone ,setNewZone] = React.useState(true)
+        
         
         async function handleClick(event) {
             if (shiftPressed) {
@@ -95,15 +97,16 @@ export default (props) => {
                 if (!newZone) {
                     if (cords.length < 3 && !newZone) {
                         zones.pop()
-                    }
-                    setNewZone(true)
-                    addZone(zones[zones.length-1]).then(() => {
-                        while (cords.length > 0) {
-                        cords.pop()
-                        }
-                        rerender()
-                    }
-                    ).catch()
+                    } else {
+                        setNewZone(true)
+                        addZone(zones[zones.length-1]).then((res) => {
+                            zones[zones.length-1]._id =res._id
+                            while (cords.length > 0) {
+                                cords.pop()
+                            }
+                            rerender()
+                        }).catch()
+                    }   
                 }    
             }
         }
