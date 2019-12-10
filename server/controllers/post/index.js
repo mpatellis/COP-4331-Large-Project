@@ -100,9 +100,9 @@ const s3 = new AWS.S3({
         };
 
         res.json(reply);
-      } else {
+      } /*else {
         return res.status(401).json({ message: 'Unauthorized user!' })
-      }
+      }*/
     })
   }
 
