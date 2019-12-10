@@ -73,25 +73,19 @@ class ShareImageScreen extends Component {
       // We have data!!
       console.log(token);
     }
-    formData.append('photo', { uri: localUri, name: filename, type });
-    return await fetch("https://fix-this.herokuapp.com/user", {
-    method: 'GET',
-    header: {
+    formData.append('file', { uri: localUri, name: filename, type });
+    formData.append('title', this.state.title);
+    formData.append('text', this.state.caption);
+    console.log(formData);
+    return await fetch("https://fix-this.herokuapp.com/post", {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'multipart/form-data',
       'Authorization': `Bearer ${token}`
     },
+    body:  formData,
   })
-      /*
-      files: formData,
-      body: JSON.stringify({
-        "title": this.state.title,
-        "text": this.state.caption,
-    }),
-      header: {
-        'Accept': 'application/json',
-        'Content-Type': 'multipart/form-data',
-        'Authorization': 'Bearer ' + token
-      },
-    })*/
     .then(response => response.json())
     .then(response => {
       console.log("upload succes", response);

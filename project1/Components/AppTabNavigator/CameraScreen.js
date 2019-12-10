@@ -126,6 +126,7 @@ class CameraScreen extends Component{
           const data = await this.camera.takePictureAsync(options);
           console.log(data.uri);
           CameraRoll.saveToCameraRoll(data.uri,'photo');
+          this.props.navigation.navigate("PostImageScreen",{image: data})
         }
       };
 
