@@ -3,37 +3,40 @@ import {
     View,
     Text,
     StyleSheet,
-    Image
+    Image,
+    TouchableOpacity
 } from "react-native";
 import { Card, CardItem, Thumbnail,Body,Left,Right,Button, Icon} from 'native-base'
 
 class CardComponent extends Component{
-    
     render(){
+        const url = this.props.url
+        console.log(url);
         return (
             <Card>
                 <CardItem>
                     <Left>
                         <Thumbnail source = {require('../assets/avatar.png')}/>
                         <Body>
-                            <Text>rip</Text>
-                            <Text>10/30/2019</Text>
+                            <Text >{this.props.title} </Text>
+                            <Text>Zone: UCF</Text>
                         </Body>
                     </Left>
                 </CardItem>
                 <CardItem cardBody>
-                    <Image source = {require ('../assets/download.jpg')}
+
+                    <Image source = {{uri: url}}
                     style = {{height: 200, width: null, flex: 1}}/>
                 </CardItem>
                 <CardItem style = {{height: 45}}>
                     <Left>
-                        <Button transparent>
-                            <Icon name = "ios-arrow-up" style = {{color: 'black'}}/>
-                        </Button>
+                    <TouchableOpacity>
+                            <Icon name = "thumbs-up" style = {{color: 'black'}}/>
+                    </TouchableOpacity>
+                        <Text>   {this.props.upvote} </Text>
                     </Left>
                 </CardItem>
                 <CardItem style = {{height: 20}}>
-                    <Text>1,000 upvote</Text>
                 </CardItem>
                 <CardItem>
                     <Body>
