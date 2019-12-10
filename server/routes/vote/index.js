@@ -7,5 +7,8 @@ module.exports = () => {
     router.route('/')
         .get(controller.vote.getAll)
 
+    router.route('/:postId/:userId')
+        .post(controller.vote.newVote)
+
     return router
 }

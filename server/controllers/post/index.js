@@ -1,6 +1,7 @@
 var Post = require('../../models/post')
 var config = require('../../../config')
 
+
 const fs = require('fs');
 const AWS = require('aws-sdk');
 require('dotenv').config()
@@ -21,6 +22,9 @@ const s3 = new AWS.S3({
 // Images are saved in s3 by the post _id
 exports.addNewPost = (req, res) => {
   console.log(req)
+  if (req.files === null || req.files.file === null) {
+    return res.status(400).json({ message: 'A file was not sent' })
+  }
   req.body.user_id = req.user._id
   let imageFile = req.files.file;
   const newPost = new Post(req.body)
