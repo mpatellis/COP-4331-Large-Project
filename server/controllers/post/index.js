@@ -19,47 +19,47 @@ const s3 = new AWS.S3({
 // TODO
 // Need to add zones
 
-// Images are saved in s3 by the post _id
-exports.addNewPost = (req, res) => {
-  console.log(req)
-  if (req.files === null || req.files.file === null) {
-    return res.status(400).json({ message: 'A file was not sent' })
-  }
-  req.body.user_id = req.user._id
-  let imageFile = req.files.file;
-  const newPost = new Post(req.body)
-  
-  // Saving the file in the pictures directory
-  imageFile.mv(`${__dirname}/${newPost._id}.jpg`, function(err) {
-    if (err) {
-      return res.status(500).send(err);
-    } else {
-      // Have to ensure that the picture has been saved before taking it and uploading it to s3
-      // This took me too long to figure out
-      let filename = newPost._id + '.jpg';
-      const fileContent = fs.readFileSync(__dirname + '/' + filename);
-      const params = {
-        Bucket: 'fix-this',
-        Key: filename,
-        Body: fileContent
-      };
-      
-      s3.upload(params, function(err, data) {
-        if (err) {
-          throw err;
-        }
-      });
+  // Images are saved in s3 by the post _id
+  exports.addNewPost = (req, res) => {
+    console.log(req)
+    if (req.files === null || req.files.file === null) {
+      return res.status(400).json({ message: 'A file was not sent' })
     }
-  });
+    req.body.user_id = req.user._id
+    let imageFile = req.files.file;
+    const newPost = new Post(req.body)
+    
+    // Saving the file in the pictures directory
+    imageFile.mv(`${__dirname}/${newPost._id}.jpg`, function(err) {
+      if (err) {
+        return res.status(500).send(err);
+      } else {
+        // Have to ensure that the picture has been saved before taking it and uploading it to s3
+        // This took me too long to figure out
+        let filename = newPost._id + '.jpg';
+        const fileContent = fs.readFileSync(__dirname + '/' + filename);
+        const params = {
+          Bucket: 'fix-this',
+          Key: filename,
+          Body: fileContent
+        };
+        
+        s3.upload(params, function(err, data) {
+          if (err) {
+            throw err;
+          }
+        });
+      }
+    });
 
-  newPost.save((err, post) => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.json(post)
-    }
-  })
-}
+    newPost.save((err, post) => {
+      if (err) {
+        res.send(err)
+      } else {
+        res.json(post)
+      }
+    })
+  }
 
   exports.getAll = (req, res) => {
     if (process.env.NODE_ENV === config.dev) {
@@ -84,7 +84,7 @@ exports.addNewPost = (req, res) => {
         res.send(err)
       } else if (!post){
         res.json({})
-      } else if (post.user_id == req.user._id) {
+      } else /*if (post.user_id == req.user._id)*/ {
         // Defining what we need from S3
         let filename = req.params.postId + '.jpg';
         const signedUrlExpireSeconds = 60 * 5
