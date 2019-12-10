@@ -69,6 +69,13 @@ exports.getAllOwned = (req, res) => {
     })
       
   }
+  exports.getZoneInfo = (req, res) => {
+      console.log(req.query)
+    Zone.find({_id: req.query.zone_id}, (err, zone) => {
+        if (err) return res.send(err)
+        return res.send(convertZoneOUT(zone))
+    })
+  }
 
 exports.createZone = (req, res) => {
     newZone = convertZoneIN(req.body)
@@ -139,7 +146,6 @@ exports.deleateZone = (req, res) => {
  * get child zones
  */
 exports.getChildren = (req, res) => {
-    console.log(req.query)
     Zone.find({parent_zone_id: req.query.zone_id}, (err, childern) => {
         if (err) return res.send(err)
         return res.send(convertZoneOUT(childern))

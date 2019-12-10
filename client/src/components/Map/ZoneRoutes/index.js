@@ -103,4 +103,20 @@ const getChildrenZone = async (zone) => {
         })
 }
 
-export {getOwnedZones, getChildrenZone, addZone, editZone, deleteZone, testZones}
+const getZoneInfo = async (zone) => {
+    const token = JWT.get()
+    if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    }
+
+    var newZone = zone
+    return await axios
+        .get(`/zone/info`, { params: newZone})
+        .then(response => {
+            return response.data
+        })
+        .catch(error => {
+        })
+}
+
+export {getOwnedZones, getChildrenZone, addZone, editZone, deleteZone, testZones, getZoneInfo}

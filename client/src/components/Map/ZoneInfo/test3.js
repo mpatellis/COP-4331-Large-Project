@@ -4,8 +4,13 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { MapContext } from '../MapContext'
 import { RIEToggle, RIEInput, RIETextArea, RIENumber, RIETags, RIESelect } from 'riek'
 import _ from 'lodash'
-import {editZone, getChildrenZone} from '../ZoneRoutes'
-import { async } from "rxjs/internal/scheduler/async";
+import {editZone, getChildrenZone, deleteZone} from '../ZoneRoutes'
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import SendUpIcon from '@material-ui/icons/ArrowDropUp';
+import DeleteIcon from '@material-ui/icons/Delete';
+import NoIcon from '@material-ui/icons/Clear';
+import YesIcon from '@material-ui/icons/Check';
 
 export default function ZoneApp(props) {
   const [zones, setZones, cords, setCords, parentZone, setParentZone] = React.useContext(MapContext)
@@ -33,18 +38,42 @@ export default function ZoneApp(props) {
 
 
   function Zone({ zone, index }) {
-      var color
-      if (zone.color) {
-          color = zone.color.replace( /\)/, ", .4)")
-      } else color = 'grey'
-      
-      const ZoneItem = styled.div`
-          width: 100%;
-          border: 1px solid grey;
-          margin-bottom: ${grid}px;
-          background-color: ${color};
-          padding: ${grid}px;
-          `;
+    const [confirmDelete, setConfirmDelete] = React.useState(false)
+    var color
+    if (zone.color) {
+        color = zone.color.replace( /\)/, ", .4)")
+    } else color = 'grey'
+    
+    const ZoneItem = styled.div`
+      width: 100%;
+      border: 1px solid grey;
+      margin-bottom: ${grid}px;
+      background-color: ${color};
+      padding: ${grid}px;
+      `;
+
+    const handleSendUp = () => {
+        const items = Array.from(state.zones);
+        var tmp = items.splice(index, 1);
+        removeIndex(index)
+        setState({ zones: items })
+        editZone({zone_id: zone._id, parent_zone_id: parentZone[0].parent_zone_id })
+    }
+
+    const handleConfimDelete = () => {
+      const items = Array.from(zones);
+      zones.splice(index, 1);
+      var tmp = items.splice(index, 1);
+      while(zones.length > 0) {
+        zones.pop()
+      }
+      for (var i in items) {
+        zones.push(items[i])
+      }
+      deleteZone({zone_id: zone._id})
+      return tmp
+    }
+    
     return (
       <Draggable draggableId={zone._id} index={index} >
         {provided => (
@@ -57,16 +86,74 @@ export default function ZoneApp(props) {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <RIEInput
-            value={zone.name}
-            change={e => {
-              zones[index].name = e.name
-              editZone({zone_id: zone._id, name: e.name})
-            }}
-            propName='name'
-            validate={_.isString}
-            /><div></div>
-            Children: {zone.children.length}   Color: {zone.color}
+            <Grid container spacing={0}>
+              <Grid item xs={12}>
+                <Grid container  >
+                  <Grid item xs={10}>
+                    <RIEInput
+                      value={zone.name}
+                      change={e => {
+                        zones[index].name = e.name
+                        editZone({zone_id: zone._id, name: e.name})
+                      }}
+                      propName='name'
+                      validate={_.isString}
+                    />
+                  </Grid>
+                  <Grid item xs={1}>
+                    { zone.parent_zone_id != null && !confirmDelete && parentZone[0] &&
+                    <IconButton 
+                      size="small"
+                      aria-label="back"
+                      onClick={async e=>{
+                      handleSendUp()
+                          }
+                      }
+                      >
+                      <SendUpIcon color="inherit" />
+                    </IconButton>}
+                    { confirmDelete &&
+                      <IconButton 
+                        size="small"
+                        aria-label="back"
+                        onClick={async e=>{setConfirmDelete(false)}
+                        }
+                        >
+                      <NoIcon color="inherit" />
+                    </IconButton>}
+                  </Grid>
+                    <Grid item xs={1}>
+                      { !confirmDelete &&
+                      <IconButton 
+                        size="small"
+                        aria-label="back"
+                        onClick={async e=>{setConfirmDelete(true)}
+                        }
+                        >
+                      <DeleteIcon color="inherit" />
+                    </IconButton>}
+                    { confirmDelete &&
+                      <IconButton 
+                        size="small"
+                        aria-label="back"
+                        onClick={async e=>{
+                          setConfirmDelete(false)
+                          handleConfimDelete()
+                        }
+                        }
+                        >
+                      <YesIcon color="inherit" />
+                    </IconButton>}
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={5}>
+                Children: {zone.children.length}
+              </Grid>
+              {/* <Grid item xs={7}>
+                Color: {zone.color}
+              </Grid> */}
+            </Grid>
           </ZoneItem>
         )}
       </Draggable>
@@ -146,6 +233,7 @@ export default function ZoneApp(props) {
     if (result.destination.index === result.source.index) {
       return;
     }
+    console.log(result.destination)
 
     const zones = reorder(
       state.zones,

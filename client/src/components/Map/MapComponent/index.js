@@ -32,10 +32,15 @@ export default (props) => {
             async function setPoint() {
                 cords.push({ lat: event.latLng.lat(), lng: event.latLng.lng()})
                 if (newZone) {
-                    zones.push(NewZoneTemplate())
+                    // var nZ = NewZoneTemplate()
+                    // zones.push()
+                    // if(parentZone[0]!= null){
+                    //     nZ.parent_zone_id = parentZone[0]._id
+                    // }
+                    // zones.push(nZ)
                     setNewZone(false)
                 }
-                zones[zones.length-1].coords.push({ lat: event.latLng.lat(), lng: event.latLng.lng()})
+                // zones[zones.length-1].coords.push({ lat: event.latLng.lat(), lng: event.latLng.lng()})
                 console.log(cords)
                 console.log(zones)
             }
@@ -75,7 +80,7 @@ export default (props) => {
                     while (cords.length > 0) {
                         cords.pop()
                     }
-                    zones.pop()
+                    //zones.pop()
                     setNewZone(true) 
                 }
                 
@@ -83,9 +88,9 @@ export default (props) => {
             if (event.key == 'Backspace'){
                 cords.pop()
                 if (!newZone) {
-                    zones[zones.length-1].coords = cords.slice(0)
+                    //zones[zones.length-1].coords = cords.slice(0)
                     if (cords.length == 0) {
-                        zones.pop()
+                        //zones.pop()
                         setNewZone(true)
                     }
                 }
@@ -96,10 +101,15 @@ export default (props) => {
             if (event.key == 'Enter'){  
                 if (!newZone) {
                     if (cords.length < 3 && !newZone) {
-                        zones.pop()
                     } else {
                         setNewZone(true)
-                        addZone(zones[zones.length-1]).then((res) => {
+                        var nZ = NewZoneTemplate()
+                        nZ.coords = cords.slice(0)
+                        if(parentZone[0]!= null){
+                            nZ.parent_zone_id = parentZone[0]._id
+                        }
+                        addZone(nZ).then((res) => {
+                            zones.push(nZ)
                             zones[zones.length-1]._id =res._id
                             while (cords.length > 0) {
                                 cords.pop()
