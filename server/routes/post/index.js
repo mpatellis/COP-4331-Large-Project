@@ -86,7 +86,7 @@ module.exports = () => {
         /**
         * @swagger
         *
-        * /user/id/:
+        * /post/id/:
         *   put:
         *     tags: [post]
         *     summary: updates post
@@ -94,7 +94,7 @@ module.exports = () => {
         *     parameters:
         *       - name: post
         *         in: body
-        *         description: the user fields to update
+        *         description: the post fields to update
         *         schema:
         *           $ref: "#/definitions/Post"
         *     responses:
