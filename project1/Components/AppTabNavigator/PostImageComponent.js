@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Image,
   TextInput,
+  Button
 } from 'react-native';
 
 export default class PostImageComponent extends Component {
@@ -29,8 +30,20 @@ export default class PostImageComponent extends Component {
             multiline={true}
             blurOnSubmit={true}
           />
-        </View>
+          <View>
+          <TextInput 
+          style={styles.caption}
+          onChangeText={(text) => this.props.setTitleHandler(text)}
+          value={this.props.title}
+          blurOnSubmit={true}
+          underlineColorAndroid={"transparent"}
+          placeholder="Give a Title"
+          multiline={true}
+          blurOnSubmit={true}
+          />
+          </View>
 
+        </View>
       </View>
     );
   }

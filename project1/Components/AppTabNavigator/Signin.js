@@ -6,7 +6,8 @@ import {
     TextInput,
     TouchableOpacity,
     Dimensions,
-    Alert
+    Alert,
+    AsyncStorage
 } from "react-native";
 import Animated, { Easing } from 'react-native-reanimated';
 import {Actions } from 'react-native-router-flux';
@@ -28,8 +29,8 @@ export default class Signin extends React.Component {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-              "username": this.state.username,
-              "password": this.state.password
+              "username": '1234'/*this.state.username*/,
+              "password": '1234'/*this.state.password*/
           
           })
         }).then((response) => response.json())
@@ -38,7 +39,10 @@ export default class Signin extends React.Component {
        Alert.alert("Error", "Error: "+ res.message);
       }
       else{
-        this.setState({ auth_token: res.auth_token });
+        this.setState({ auth_token: res.token });
+        console.log(res.token);
+       AsyncStorage.setItem("token",res.token);
+       console.log(AsyncStorage.getItem("token"));
         Alert.alert("Welcome", " You have succesfully logged in");
         this.props.navigation.navigate("Home")
         }

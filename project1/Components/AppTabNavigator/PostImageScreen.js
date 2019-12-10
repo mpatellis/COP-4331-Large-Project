@@ -4,6 +4,9 @@ import {
   View,
   Text,
   StyleSheet,
+  Button,
+  Platform,
+  AsyncStorage
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -12,6 +15,24 @@ import * as PostActions from './Post.actions';
 import PostImageComponent from './PostImageComponent';
 
 const ShareImageScreenPointer = {}
+
+
+const createFormData = (photo, body) => {
+  const data = new FormData();
+
+  data.append("photo", {
+    name: photo.fileName,
+    type: photo.type,
+    uri:
+      Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
+  });
+
+  Object.keys(body).forEach(key => {
+    data.append(key, body[key]);
+});
+
+return data;
+}
 class ShareImageScreen extends Component {
   constructor(props) {
     super(props);
@@ -19,25 +40,8 @@ class ShareImageScreen extends Component {
       image: this.props.navigation.state.params.image
     };
   }
-  static navigationOptions = (props) => ({
-    title: 'Share To',
-    headerBackTitle: 'Back',
-    headerRight: (
-      <TouchableOpacity
-        onPress={() => ShareImageScreenPointer.this.postImage()}
-      >
-        <Text style={styles.nextBtn}>Share</Text>
-      </TouchableOpacity>
-    ),
-    headerLeft: (
-      <MaterialCommunityIcons
-        name="arrow-left"
-        style={styles.backBtn}
-        onPress={() => props.navigation.goBack(null)}
-      />
-    ),
-  });
 
+  
 
   componentWillMount () {
     ShareImageScreenPointer.this = this;
@@ -45,40 +49,99 @@ class ShareImageScreen extends Component {
 
   state = {
     caption: '',
+    title: '',
     //image: this.props.navigation.state.params.image
   }
 
   setCaptionHandler = (caption) => {
     this.setState({caption})
   }
-
-  postImage = () => {
-    this.props.postImage({
-      caption: this.state.caption,
-    }).then((result) => {
-
-      const resetAction = NavigationActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({ routeName: 'CreateImage' })],
-      });
-      this.props.navigation.dispatch(resetAction);
-
-      if (result) this.props.navigation.navigate('Home');
-    });
+  setTitleHandler = (title) => {
+    this.setState({title})
   }
+  handleUploadPhoto = async () =>  {
+    let result =  this.state.image
+    let localUri = result.uri;
+    let filename = localUri.split('/').pop();
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+    let formData = new FormData();
+    var token = await AsyncStorage.getItem('token');
+    var token1 = `Bearer ${token}`
+    console.log(token1);
+    if (token !== null) {
+      // We have data!!
+      console.log(token);
+    }
+    formData.append('photo', { uri: localUri, name: filename, type });
+    return await fetch("https://fix-this.herokuapp.com/user", {
+    method: 'GET',
+    header: {
+      'Authorization': `Bearer ${token}`
+    },
+  })
+      /*
+      files: formData,
+      body: JSON.stringify({
+        "title": this.state.title,
+        "text": this.state.caption,
+    }),
+      header: {
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + token
+      },
+    })*/
+    .then(response => response.json())
+    .then(response => {
+      console.log("upload succes", response);
+      alert("Upload success!");
+      this.setState({ photo: null });
+    })
+    .catch(error => {
+      console.log("upload error", error);
+      alert("Upload failed!");
+    });
 
+
+
+    /*fetch("http://fix-this.herokuapp.com/post", {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ' + token
+      },
+      method: 'POST',
+      body: createFormData(this.state.image, { text: this.state.caption, title: this.state.title }),
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log("upload succes", response);
+        alert("Upload success!");
+        this.setState({ photo: null });
+      })
+      .catch(error => {
+        console.log("upload error", error);
+        alert("Upload failed!");
+      });*/
+  };
+ 
   render() {
     return (
       <View style={styles.container}>
-
+          <Button title = 'POST' onPress={this.handleUploadPhoto}></Button>
         <PostImageComponent
           image={this.state.image}
           caption={this.state.caption}
+          title = {this.state.title}
           setCaptionHandler={ text => this.setCaptionHandler(text)}
+          setTitleHandler = {text => this.setTitleHandler(text)}
         />
 
       </View>
+      
     );
+    
   }
 }
 
