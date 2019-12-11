@@ -35,38 +35,72 @@ function convertPostIN(post) {
     }
     req.body.user_id = req.user._id
     let imageFile = req.files.file;
-    const newPost = convertPostIN(req.body)
+    if (req.body.location) {
+      const newPost = convertPostIN(req.body)
+      // Saving the file in the pictures directory
+      imageFile.mv(`${__dirname}/${newPost._id}.jpg`, function(err) {
+        if (err) {
+          return res.status(500).send(err);
+        } else {
+          // Have to ensure that the picture has been saved before taking it and uploading it to s3
+          // This took me too long to figure out
+          let filename = newPost._id + '.jpg';
+          const fileContent = fs.readFileSync(__dirname + '/' + filename);
+          const params = {
+            Bucket: 'fix-this',
+            Key: filename,
+            Body: fileContent
+          };
+          
+          s3.upload(params, function(err, data) {
+            if (err) {
+              throw err;
+            }
+          });
+        }
+      });
+  
+      newPost.save((err, post) => {
+        if (err) {
+          res.send(err)
+        } else {
+          res.json(post)
+        }
+      })
+    } else {
+      const newPost = new Post(req.body)
+      // Saving the file in the pictures directory
+      imageFile.mv(`${__dirname}/${newPost._id}.jpg`, function(err) {
+        if (err) {
+          return res.status(500).send(err);
+        } else {
+          // Have to ensure that the picture has been saved before taking it and uploading it to s3
+          // This took me too long to figure out
+          let filename = newPost._id + '.jpg';
+          const fileContent = fs.readFileSync(__dirname + '/' + filename);
+          const params = {
+            Bucket: 'fix-this',
+            Key: filename,
+            Body: fileContent
+          };
+          
+          s3.upload(params, function(err, data) {
+            if (err) {
+              throw err;
+            }
+          });
+        }
+      });
+  
+      newPost.save((err, post) => {
+        if (err) {
+          res.send(err)
+        } else {
+          res.json(post)
+        }
+      })
+    }
     
-    // Saving the file in the pictures directory
-    imageFile.mv(`${__dirname}/${newPost._id}.jpg`, function(err) {
-      if (err) {
-        return res.status(500).send(err);
-      } else {
-        // Have to ensure that the picture has been saved before taking it and uploading it to s3
-        // This took me too long to figure out
-        let filename = newPost._id + '.jpg';
-        const fileContent = fs.readFileSync(__dirname + '/' + filename);
-        const params = {
-          Bucket: 'fix-this',
-          Key: filename,
-          Body: fileContent
-        };
-        
-        s3.upload(params, function(err, data) {
-          if (err) {
-            throw err;
-          }
-        });
-      }
-    });
-
-    newPost.save((err, post) => {
-      if (err) {
-        res.send(err)
-      } else {
-        res.json(post)
-      }
-    })
   }
 
   exports.getAll = (req, res) => {
@@ -128,9 +162,7 @@ function convertPostIN(post) {
         };
 
         res.json(reply);
-      } /*else {
-        return res.status(401).json({ message: 'Unauthorized user!' })
-      }*/
+      }
     })
   }
 

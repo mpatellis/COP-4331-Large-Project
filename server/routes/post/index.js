@@ -30,9 +30,20 @@ module.exports = () => {
          *     description: creates a post and returns post
          *     security:
          *       - BearerAuth: []
+         *     consumes:
+         *       - multipart/form-data
          *     parameters:
-         *       - name: post
-         *         in: body
+         *       - in: formData
+         *         name: file
+         *         type: file
+         *       - in: formData
+         *         name: title
+         *         type: string
+         *         required: true
+         *       - in: formData
+         *         name: text
+         *         type: string
+         *         required: true
          *         description: the post you want to create
          *         schema:
          *           $ref: "#/definitions/Post"
@@ -48,11 +59,17 @@ module.exports = () => {
         /**
         * @swagger
         *
-        * /post/id/:
+        * /post/id/{postId}:
         *   get:
         *     tags: [post]
         *     summary: get post by post id
         *     description: return post
+        *     parameters:
+        *       - in: path
+        *         name: postId
+        *         schema:
+        *           type: string
+        *         required: true
         *     responses:
         *       200:
         *         description: retrieval succesfull.
