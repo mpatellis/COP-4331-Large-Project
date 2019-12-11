@@ -104,6 +104,26 @@ module.exports = () => {
         *         description: update failed.
         */
         .put(controller.post.updateById)
+    router.route('/zoneid/:zone_Id')
+        /**
+        * @swagger
+        *
+        * /post/id/:
+        *   get:
+        *     tags: [post]
+        *     summary: get post by post id
+        *     description: return post
+        *     responses:
+        *       200:
+        *         description: retrieval succesfull.
+        *         schema:
+        *           properties:
+        *             token:
+        *               type: string
+        *       401:
+        *         description: retrieval failed.
+        */
+        .get(controller.post.getByZoneId)
 
     return router
 }

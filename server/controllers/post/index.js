@@ -106,6 +106,38 @@ const s3 = new AWS.S3({
     })
   }
 
+  exports.getByZoneId = (req, res) => { // :)
+    Post.find({zone_id: req.params.zone_id}, (err, posts) => {
+      if (err) {
+        res.send(err)
+      } else if (!posts[0]){
+        res.json({})
+      } else /*if (post.user_id == req.user._id)*/ {
+        // Defining what we need from S3
+        var reply = []
+        for (var p in posts) {
+          let filename = posts[p]._id + '.jpg';
+          const signedUrlExpireSeconds = 60 * 5
+          const url = s3.getSignedUrl('getObject', {
+            Bucket: 'fix-this',
+            Key: filename,
+            Expires: signedUrlExpireSeconds
+          })
+          console.log(posts[p])
+          reply[p] = {
+            url: url,
+            body: posts[p]
+          };
+        }
+        
+
+        res.json(reply);
+      } /*else {
+        return res.status(401).json({ message: 'Unauthorized user!' })
+      }*/
+    })
+  }
+
   // TODO
   // ability for admin to delete as well
   exports.deleteById = (req, res) => {
