@@ -58,7 +58,7 @@ module.exports = () => {
     router.route('/id/:postId')
         /**
         * @swagger
-        *
+        * 
         * /post/id/{postId}:
         *   get:
         *     tags: [post]
@@ -69,15 +69,19 @@ module.exports = () => {
         *         name: postId
         *         schema:
         *           type: string
+        *           minimum: 1
         *         required: true
+        *         description: the id of the post
         *     responses:
         *       200:
         *         description: retrieval succesfull.
         *         schema:
         *           properties:
-        *             token:
+        *             url:
         *               type: string
-        *       401:
+        *             body:
+        *               type: string
+        *       400:
         *         description: retrieval failed.
         */
         .get(controller.post.getById)

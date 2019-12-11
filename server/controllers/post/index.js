@@ -141,6 +141,8 @@ function convertPostIN(post) {
   // reply.body will have all teh post text data
   // reply.url will have the url to download the picture
   exports.getById = (req, res) => { // :)
+    console.log('post id')
+    console.log(req.params.postId)
     Post.findById(req.params.postId, (err, post) => {
       if (err) {
         res.send(err)
@@ -251,7 +253,16 @@ function convertPostIN(post) {
       if (err) {
         res.send(err)
       } else {
-        res.json(post)
+        const url = s3.getSignedUrl('getObject', {
+          Bucket: 'fix-this',
+          Key: filename,
+          Expires: signedUrlExpireSeconds
+        })
+        const reply = {
+          url: url,
+          body: post
+        }
+        res.json(reply)
       }
     })
   }
