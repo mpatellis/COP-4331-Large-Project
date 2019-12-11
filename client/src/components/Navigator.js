@@ -30,11 +30,11 @@ import {AppContext } from '../AppContext'
 
 const categories = [
   {
-    id: 'Reports',
+    id: 'Zone',
     children: [
-      { id: 'Featured', icon: <StarBorderIcon />, active: true },
-      { id: 'New', icon: <NewReleasesIcon /> },
-      { id: 'Search', icon: <SearchIcon />, pageName: "home"},
+      // { id: 'Featured', icon: <StarBorderIcon />, active: true },
+      // { id: 'New', icon: <NewReleasesIcon /> },
+      // { id: 'Search', icon: <SearchIcon />, pageName: "home"},
       { id: 'Map', icon: <SearchIcon /> , pageName: "map" },
     ],
   }

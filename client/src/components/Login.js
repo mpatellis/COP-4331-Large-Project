@@ -69,7 +69,7 @@ function Login() {
       })
       .then(response => {
         JWT.keep(response.data.token)
-        setPage('home')
+        setPage('map')
       })
       .catch(error => {
         console.error(error)
