@@ -63,7 +63,7 @@ function Login() {
   const handleSubmit = event => {
     event.preventDefault()
     axios
-      .post('https://fix-this.herokuapp.com/user/login', {
+      .post('/user/login', {
         username: username,
         password: password
       })

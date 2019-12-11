@@ -141,29 +141,26 @@ function Content(props) {
 
 
     if (posts.length != 0) {
-      var postFeed = [posts[10]] || []
+      var postFeed = posts || []
       console.log(postFeed[0].file = postFeed[0].url)
       return (
+        // <img src={postFeed[0].file} alt="W3Schools.com"></img>
         <Grid container spacing={3}>
           {postFeed.map((item, index) =>
             <Grid key={item.body._id} item md={4} onClick={(e) => { console.log(item.body._id); handleClickOpen(item.body._id) }}>
               <Card color="primary" className={classes.card}>
-                <CardContent>
-                  <img src="https://fix-this.s3.amazonaws.com/5df148f2ef40f36d529d3e12.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIFAXIQASCBJHSHSQ%2F20191211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20191211T195325Z&X-Amz-Expires=300&X-Amz-Signature=ada3c188cf375d98770233e17516bb1ba06adc147fc605ba18f441e7f0549c19&X-Amz-SignedHeaders=host" alt="pic"> </img>
-                  <Typography variant="h5" component="h2">
+                <CardContent align="center">
+                  <div style={{height: '200px',width: '200px', maxWidth: '400px', overflow: "hidden"}}>
+                    <img src={item.url} alt={item.body._id} style={{width: '200px'}}></img>
+                  </div>
+                  <Typography variant="h5" component="h2" align="center">
                     {item.body.title}
-                  </Typography>
-                  <Typography className={classes.pos} color="textSecondary">
-                    {item.category}<br />
-                  </Typography>
-                  <Typography component="p" >
-                    {(item.body.text.length <= 100) ? item.body.text : item.body.text.substring(0, 100) + "..."}
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>)
           }
-          <PostInfo selectedValue={selectedValue} open={false} onClose={handleClose} />
+          <PostInfo selectedValue={selectedValue} open={open} onClose={handleClose} />
         </Grid >
       )
     }

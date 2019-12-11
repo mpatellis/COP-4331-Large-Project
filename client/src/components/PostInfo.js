@@ -6,7 +6,8 @@ import { List, ListItem, ListItemText } from '@material-ui/core'
 import JWT from 'jwt-client'
 import axios from 'axios'
 import { from } from 'rxjs'
-
+import AppBar from '@material-ui/core/AppBar';
+import Grid from '@material-ui/core/Grid'
 import GridList from '@material-ui/core/GridList'
 import GridListTile from '@material-ui/core/GridListTile'
 import Button from '@material-ui/core/Button'
@@ -15,7 +16,8 @@ import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
 import { makeStyles } from '@material-ui/core/styles';
 import color from '@material-ui/core/colors/blue'
-
+import UpVoteIcon from '@material-ui/icons/ThumbUp';
+import IconButton from '@material-ui/core/IconButton';
 import Comments from './Comments'
 import NewComment from './NewComment'
 
@@ -60,7 +62,6 @@ const PostInfo = (props) => {
 
     if (inital == 0) {
         getPost()
-        getComments()
         setInital(1)
     }
 
@@ -86,9 +87,10 @@ const PostInfo = (props) => {
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
         }
         axios
-            .get(`/comments/${selectedValue}`)
+            .post(`/vote/${selectedValue}/${selectedValue}`)
             .then(response => {
                 setComments(response.data)
+                getPost()
             })
             .catch(error => {
             })
@@ -104,17 +106,47 @@ const PostInfo = (props) => {
     if (post.body) {
         return (
             <Dialog onClose={handleClose} aria-labelledby="dialog-title" open={open}>
-                <DialogTitle id="dialog-title">{post.body.title}</DialogTitle>
+                
+                <AppBar id="dialog-title" position="sticky">
+                    <Grid container  >
+                        <Grid item xs={12}>
+                            <Grid container  >
+                                <Grid item xs={10}>
+                                <div style={{padding: '3px'}}>
+                                <Typography variant="h4" padding="3px"> {post.body.title}</Typography>
+                                </div>
+                                </Grid>
+                                
+                                <Grid item xs={2}>
+                                    <div width="100%" justifyContent="left">
+                                    {post.body.up_votes}
+                                        <IconButton 
+                                            size="small"
+                                            aria-label="back"
+                                            onClick={ e=>{getComments()}
+                                            }
+                                            >
+                                            <UpVoteIcon color="inherit" />
+                                            
+                                        </IconButton>
+                                    </div>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    </AppBar>
+                <div style={{width: '500px', padding: '10px'}} align="center">
+                    <div style={{width: '100%', overflow: "hidden"}}>
+                        <img src={post.url} alt={post.body._id} width="480px" ></img>
+                    </div>
+                </div>
                 <List>
-                    <ListItem  >
-                        {/* <ListItemText primary={post.category} /> */}
-                    </ListItem>
                     <ListItem  >
                         <ListItemText primary={post.body.text} />
                     </ListItem>
                 </List>
-                <Comments loadComments={loadComments} setLoadComments={setLoadComments} selectedValue={selectedValue} />
-                <NewComment loadComments={loadComments} setLoadComments={setLoadComments} selectedValue={selectedValue} />
+                {/* <Comments loadComments={loadComments} setLoadComments={setLoadComments} selectedValue={selectedValue} /> */}
+                {/* <NewComment loadComments={loadComments} setLoadComments={setLoadComments} selectedValue={selectedValue} /> */}
             </Dialog >
         )
     }
