@@ -69,6 +69,19 @@ exports.getAllOwned = (req, res) => {
     })
       
   }
+
+  exports.getAllOwnedBy = (req, res) => {
+    Super_admin.find({user_id: req.body.user_id}, (err, master) => {
+        if (err) return res.send(err)
+        if (master == null || master.length == 0) return res.send(master)
+        var tmp = master.map((item => {return {_id: item.zone_id}}))
+        Zone.find().or(tmp)
+        .then((zones) => {
+            return res.json(convertZoneOUT(zones))
+        }).catch((err)=>{return res.send(err)})
+    })
+      
+  }
   exports.getZoneInfo = (req, res) => {
       console.log(req.query)
     Zone.find({_id: req.query.zone_id}, (err, zone) => {
