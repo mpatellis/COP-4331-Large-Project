@@ -29,8 +29,8 @@ export default class Signin extends React.Component {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-              "username": 'ross'/*this.state.username*/,
-              "password": '1234qwer'/*this.state.password*/
+              "username": this.state.username,
+              "password": this.state.password
           
           })
         }).then((response) => response.json())
