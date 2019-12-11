@@ -153,6 +153,7 @@ function Header(props) {
                 {(page == 'login' && 'Login')}
                 {(page == 'register' && 'Register')}
                 {(page == 'map' && 'Zone Creation')}
+                {(page == 'posts' && 'Post Feed')}
               </Typography>
             </Grid>
           </Grid>
