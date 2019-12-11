@@ -19,6 +19,6 @@ const voteSchema = new Schema({
   }
 })
 
-//voteSchema.index({ user_id: 1, post_id: 1 }, { unique: true })
+voteSchema.index({ user_id: 1, post_id: 1 }, { unique: true })
 
 module.exports = mongoose.model('vote', voteSchema, 'vote')
