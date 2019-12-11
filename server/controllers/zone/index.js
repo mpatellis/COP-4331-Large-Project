@@ -36,6 +36,29 @@ function convertZoneOUT(zone) {
         return zones
     }
 }
+function convertZoneOUTMobile(zone) {
+    var zones = []
+    if (zone) {
+        for (var z in zone) {
+            var newZone = {
+                name: zone[z].name,
+                _id: zone[z]._id,
+                parent_zone_id: zone[z].parent_zone_id,
+                owner_id: zone[z].owner_id,
+                date_created: zone[z].date_created,
+                public: zone[z].public,
+                color: zone[z].color,
+                coordinates: [],
+                children: []
+            }
+            for (var e in zone[z].location.coordinates[0]) {
+                newZone.coordinates[e] = {latitude: zone[z].location.coordinates[0][e][0], longitude: zone[z].location.coordinates[0][e][1]  }
+            }
+            zones[z] = newZone   
+        }
+        return zones
+    }
+}
 
 exports.test = (req,res) => {
     console.log(req)
@@ -69,11 +92,24 @@ exports.getAllOwned = (req, res) => {
     })
       
   }
+
+  exports.getAllOwnedBy = (req, res) => {
+      const convert = (req.query.mobile) ? convertZoneOUTMobile : convertZoneOUT
+    Super_admin.find({user_id: req.query.user_id}, (err, master) => {
+        if (err) return res.send(err)
+        if (master == null || master.length == 0) return res.send(master)
+        var tmp = master.map((item => {return {_id: item.zone_id}}))
+        Zone.find().or(tmp)
+        .then((zones) => {
+            return res.json(convert(zones))
+        }).catch((err)=>{return res.send(err)})
+    })   
+  }
   exports.getZoneInfo = (req, res) => {
-      console.log(req.query)
+    const convert = (req.query.mobile) ? convertZoneOUTMobile : convertZoneOUT
     Zone.find({_id: req.query.zone_id}, (err, zone) => {
         if (err) return res.send(err)
-        return res.send(convertZoneOUT(zone))
+        return res.send(convert(zone))
     })
   }
 
@@ -146,9 +182,10 @@ exports.deleateZone = (req, res) => {
  * get child zones
  */
 exports.getChildren = (req, res) => {
+    const convert = (req.query.mobile) ? convertZoneOUTMobile : convertZoneOUT
     Zone.find({parent_zone_id: req.query.zone_id}, (err, childern) => {
         if (err) return res.send(err)
-        return res.send(convertZoneOUT(childern))
+        return res.send(convert(childern))
     })
 }
 
