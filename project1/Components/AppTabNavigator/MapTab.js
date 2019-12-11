@@ -2,7 +2,8 @@ import React, {Component } from "react";
 import {
     View,
     Text,
-    StyleSheet
+    StyleSheet,
+    AsyncStorage
 } from "react-native";
 import {Icon} from 'native-base';
 import MapView, {PROVIDER_GOOGLE, Polygon} from 'react-native-maps';
@@ -17,13 +18,7 @@ class MapTab extends Component{
     state = {
         latitude: null,
         longitude: null,
-        coordinates: [
-            {name: '1', latitude: 28.606242, longitude: -81.206311},
-            {name: '2', latitude: 28.610376, longitude: -81.192297},
-            {name: '3', latitude: 28.604032, longitude: -81.189344},
-            {name: '4', latitude: 28.591729, longitude: -81.194586},
-            {name: '5', latitude: 28.597840, longitude: -81.207318},
-        ]
+        coordinates: []
     }
 
     async componentDidMount() {
@@ -35,6 +30,23 @@ class MapTab extends Component{
             ({coords: {latitude, longitude}}) => this.setState({latitude, longitude}),
             (error) => console.log('Error:',error)
         )
+        var token = await AsyncStorage.getItem('token');
+        try{
+            const response =  await fetch("https://fix-this.herokuapp.com/zone/ownedBy?user_id=5dee4e96939297001783e17f&mobile=true", {
+            method: 'GET',
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+            },
+        })
+        const data = await response.json();
+        console.log(data);
+        console.log(data[0].coordinates)
+        this.setState({coordinates: data})
+    }catch(err) {
+        console.log("Error fetching data-----------", err);
+    }
     }
     render(){
         const {latitude,longitude} = this.state
@@ -51,10 +63,13 @@ class MapTab extends Component{
                     longitudeDelta: 0.0421
                 }}
                 >
-                <Polygon
-                coordinates = {this.state.coordinates}
-                fillColor = {'rgba(100,200,200,0.3)'}
-                />
+               {
+                    this.state.coordinates.map((y)=>{
+                        return (<Polygon key = {y._id} coordinates = {y.coordinates}
+                            fillColor = {y.color}
+                            />)
+                    })
+                }
                 </MapView>
             );
         }

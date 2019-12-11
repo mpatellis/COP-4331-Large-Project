@@ -25,6 +25,7 @@
     "mongodb": "^3.3.2",
     "mongoose": "^5.7.5",
     "react-beautiful-dnd": "^12.2.0",
+    "react-native-jwt": "^1.0.0",
     "react-split-pane": "^0.1.89",
     "styled-components": "^4.4.1",
     "swagger-jsdoc": "^3.4.0",

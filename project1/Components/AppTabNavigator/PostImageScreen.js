@@ -91,6 +91,7 @@ class ShareImageScreen extends Component {
       console.log("upload succes", response);
       alert("Upload success!");
       this.setState({ photo: null });
+      this.props.navigation.goBack()
     })
     .catch(error => {
       console.log("upload error", error);

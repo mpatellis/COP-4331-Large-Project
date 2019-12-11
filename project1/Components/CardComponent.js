@@ -4,14 +4,42 @@ import {
     Text,
     StyleSheet,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from "react-native";
 import { Card, CardItem, Thumbnail,Body,Left,Right,Button, Icon} from 'native-base'
 
+var jwtDecode = require('jwt-decode');
 class CardComponent extends Component{
+    UpVote = async () => {
+        fetch(`https://fix-this.herokuapp.com/vote/${this.props.post_id}/${this.props.user_id}`, {
+              method: 'post',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.props.token}`
+              },
+            })
+            .then((res) => {
+          if(res.status == 200){
+            Alert.alert("upvoted", " upvoted");
+          }
+          else{
+            Alert.alert("Error", "Error: "+ res.message);
+            console.log("it not work")
+            }
+         })
+         .catch((error) => {
+             console.error(error);
+            });
+      }
     render(){
         const url = this.props.url
-        console.log(url);
+        try{
+            const data = jwtDecode(this.props.user_id)
+        }catch(error) {
+            console.log(error)
+        }
         return (
             <Card>
                 <CardItem>
@@ -19,7 +47,7 @@ class CardComponent extends Component{
                         <Thumbnail source = {require('../assets/avatar.png')}/>
                         <Body>
                             <Text >{this.props.title} </Text>
-                            <Text>Zone: UCF</Text>
+                            <Text>Zone: UCF </Text>
                         </Body>
                     </Left>
                 </CardItem>
@@ -30,7 +58,7 @@ class CardComponent extends Component{
                 </CardItem>
                 <CardItem style = {{height: 45}}>
                     <Left>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={this.UpVote}>
                             <Icon name = "thumbs-up" style = {{color: 'black'}}/>
                     </TouchableOpacity>
                         <Text>   {this.props.upvote} </Text>
@@ -40,9 +68,9 @@ class CardComponent extends Component{
                 </CardItem>
                 <CardItem>
                     <Body>
+                        <Text style = {{fontWeight: "900"}}>Description: </Text>
                         <Text>
-                            <Text style = {{fontWeight: "900"}}>rip </Text>
-                            Damn, please just throw it away!
+                               {this.props.caption}
                         </Text>
                     </Body>
                 </CardItem>

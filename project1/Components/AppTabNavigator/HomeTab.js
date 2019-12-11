@@ -3,14 +3,28 @@ import {
     View,
     Text,
     StyleSheet,
-    AsyncStorage
+    AsyncStorage,
+    RefreshControl,
+    ScrollView,
+    ActivityIndicator
 } from "react-native";
 
 import {Icon, Container, Content} from 'native-base'
 import CardComponent from '../CardComponent'
+
+
+function wait(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
+var jwtDecode = require('jwt-decode');
+
 class HomeTab extends Component{
     constructor(props) {
         super(props);
+        this.state = { refreshing: true };
+        this.GetData();
     }
     state = {
         posts: [],
@@ -18,15 +32,20 @@ class HomeTab extends Component{
         url : null,
         title: null,
         upvote: null,
+        user_id: null,
+        post_id: null,
+        token: null,
     }
     static navigationOptions = {
         tabBarIcon: ({tintColor}) => (
             <Icon name = "home" style = {{color: tintColor}}/>
         ),
     };
-    async componentDidMount() {
+    async GetData() {
         var token = await AsyncStorage.getItem('token');
-        const response =  await fetch("https://fix-this.herokuapp.com/post/id/5def01daf417ac0017312113", {
+        var decoded = jwtDecode(token);
+        console.log(decoded);
+        const response =  await fetch("https://fix-this.herokuapp.com/post/", {
         method: 'GET',
         headers: {
         'Accept': 'application/json',
@@ -36,11 +55,7 @@ class HomeTab extends Component{
     })
         const data = await response.json();
         console.log(data);
-        console.log(data.url);
-        console.log(data.body);
-        console.log(data.body.title);
-        console.log(data.body.up_votes);
-        this.setState({url:data.url,title: data.body.title, loading: false, upvote: data.body.up_votes})
+        this.setState({refreshing: false, loading: false, token : token ,posts: data})
         //Have a try and catch block for catching errors.
        /* try {
             const postsApi = await fetch('https://fix-this.herokuapp.com/post/id/5def01daf417ac0017312113');
@@ -50,15 +65,40 @@ class HomeTab extends Component{
             console.log("Error fetching data-----------", err);
         }*/
     }
+    onRefresh() {
+        //Clear old data of the list
+        this.setState({ posts: [] });
+        //Call the Service to get the latest data
+        this.GetData();
+      }
+      
     render(){
+        if (this.state.refreshing) {
+            return (
+              //loading view while data is loading
+              <View style={{ flex: 1, paddingTop: 20 }}>
+                <ActivityIndicator />
+              </View>
+            );
+          }
         return (
-            <Container style = {styles.container}>
-                <Content>
-                    {this.state.loading || !this.state.url? <Text>loading...</Text> : 
-                    <CardComponent url = {this.state.url} title = {this.state.title} upvote = {this.state.upvote}/>
+            <ScrollView style = {styles.container} refreshControl={
+                <RefreshControl
+                  //refresh control used for the Pull to Refresh
+                  refreshing={this.state.refreshing}
+                  onRefresh={this.onRefresh.bind(this)}
+                />
+              }>
+                {
+                 this.state.loading || !this.state.posts? <Text>loading...</Text> : 
+                    this.state.posts.map((y) =>{
+                        return(<Content key = {y.body._id}>                            
+                            <CardComponent caption = {y.body.text} url = {y.url} title = {y.body.title} upvote = {y.body.up_votes} user_id = {y.body.user_id} post_id = {y.body._id} token = {this.state.token}/>  
+                        </Content>)
+                    })
+                    
                 }
-                </Content>
-            </Container>
+            </ScrollView>
         );
     }
 
