@@ -16,7 +16,7 @@
     "react-sortable-tree": "^2.7.1",
     "react-sortable-tree-theme-minimal": "^0.0.14"
   },
-  "proxy": "http://localhost:80",
+  "proxy": "https://fix-this.herokuapp.com/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

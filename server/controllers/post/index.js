@@ -5,10 +5,12 @@ var config = require('../../../config')
 const fs = require('fs');
 const AWS = require('aws-sdk');
 require('dotenv').config()
-
+process.env.AWS_ID =     'AKIAIFAXIQASCBJHSHSQ'
+process.env.AWS_SECRET = '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'
 
 const id =     process.env.AWS_ID;
 const secret = process.env.AWS_SECRET;
+console.log( id,secret)
 
 const s3 = new AWS.S3({
   accessKeyId: id,
@@ -35,7 +37,7 @@ function convertPostIN(post) {
     }
     req.body.user_id = req.user._id
     let imageFile = req.files.file;
-    const newPost = convertPostIN(req.body)
+    const newPost = Post(req.body)
     
     // Saving the file in the pictures directory
     imageFile.mv(`${__dirname}/${newPost._id}.jpg`, function(err) {
@@ -49,7 +51,9 @@ function convertPostIN(post) {
         const params = {
           Bucket: 'fix-this',
           Key: filename,
-          Body: fileContent
+          Body: fileContent,
+          ContentDisposition: 'inline',
+          ContentType: 'image/jpeg'
         };
         
         s3.upload(params, function(err, data) {

@@ -33,4 +33,7 @@ const zoneSchema = new Schema({
   }
 })
 
+zoneSchema.index({ owner_id: 1, parent_zone_id: 1 })
+zoneSchema.index({parent_zone_id: 1 })
+
 module.exports = mongoose.model('zone', zoneSchema, 'zone')

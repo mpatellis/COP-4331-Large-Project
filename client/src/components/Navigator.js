@@ -34,7 +34,7 @@ const categories = [
     children: [
       { id: 'Featured', icon: <StarBorderIcon />, active: true },
       { id: 'Following', icon: <PeopleIcon /> },
-      { id: 'New', icon: <NewReleasesIcon /> },
+      { id: 'New', icon: <NewReleasesIcon />, pageName: "posts" },
       { id: 'Search', icon: <SearchIcon />, pageName: "home"},
       { id: 'Map', icon: <SearchIcon /> , pageName: "map" },
     ],

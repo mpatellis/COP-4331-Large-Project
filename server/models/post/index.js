@@ -12,7 +12,7 @@ const postSchema = new Schema({
   zone_id: {
     type: Schema.Types.ObjectId,
     ref: 'zone',
-    required: true
+    // required: true
   },
   title: {
     type: String,
@@ -23,7 +23,7 @@ const postSchema = new Schema({
   },
   location: {
     type: location.pointSchema,
-    required: true
+    //required: true
   },
   open: {
     type: Boolean,
@@ -43,4 +43,5 @@ const postSchema = new Schema({
   }
 })
 
+postSchema.index({ zone_id: 1 })
 module.exports = mongoose.model('post', postSchema, 'post')

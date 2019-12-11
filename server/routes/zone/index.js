@@ -96,14 +96,61 @@ module.exports = () => {
       *         description: failed.
       */
       .get(loginRequired, controller.zone.getChildren)
-
+      /**
+      * @swagger
+      * /zone/owned:
+      *   get:
+      *     tags: [zone]
+      *     summary: get owned zones
+      *     description: gets all master zones
+      *     security:
+      *       - BearerAuth: []
+      *     parameters:
+      *     responses:
+      *       200:
+      *         description: succesfull.
+      *       401:
+      *         description: failed.
+      */
     router.route('/owned')
       .get(loginRequired, controller.zone.getAllOwned)
+      /**
+      * @swagger
+      * /zone/ownedBy:
+      *   get:
+      *     tags: [zone]
+      *     summary: get owned zones
+      *     description: gets all master zones 
+      *     security:
+      *       - BearerAuth: []
+      *     parameters:
+      *     responses:
+      *       200:
+      *         description: succesfull.
+      *       401:
+      *         description: failed.
+      */
     router.route('/ownedBy')
       .get(loginRequired, controller.zone.getAllOwnedBy)
+          /**
+      * @swagger
+      * /zone/info:
+      *   get:
+      *     tags: [zone]
+      *     summary: get zone info
+      *     description: gets all zones 
+      *     security:
+      *       - BearerAuth: []
+      *     parameters:
+      *     responses:
+      *       200:
+      *         description: succesfull.
+      *       401:
+      *         description: failed.
+      */
     router.route('/info')
       .get(loginRequired, controller.zone.getZoneInfo)
-    
+
     router.route('/test')
       .post(controller.zone.test)
 
