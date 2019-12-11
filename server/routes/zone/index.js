@@ -100,7 +100,7 @@ module.exports = () => {
     router.route('/owned')
       .get(loginRequired, controller.zone.getAllOwned)
     router.route('/ownedBy')
-      .get(loginRequired, controller.zone.getAllOwned)
+      .get(loginRequired, controller.zone.getAllOwnedBy)
     router.route('/info')
       .get(loginRequired, controller.zone.getZoneInfo)
     
