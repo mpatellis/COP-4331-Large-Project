@@ -253,6 +253,8 @@ function convertPostIN(post) {
       if (err) {
         res.send(err)
       } else {
+        let filename = post._id + '.jpg'
+        const signedUrlExpireSeconds = 60 * 5
         const url = s3.getSignedUrl('getObject', {
           Bucket: 'fix-this',
           Key: filename,

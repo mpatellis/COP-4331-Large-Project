@@ -63,7 +63,7 @@ module.exports = () => {
         *   get:
         *     tags: [post]
         *     summary: get post by post id
-        *     description: return post
+        *     description: returns post with postId
         *     parameters:
         *       - in: path
         *         name: postId
