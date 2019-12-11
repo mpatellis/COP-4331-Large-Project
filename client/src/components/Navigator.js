@@ -33,20 +33,11 @@ const categories = [
     id: 'Reports',
     children: [
       { id: 'Featured', icon: <StarBorderIcon />, active: true },
-      { id: 'Following', icon: <PeopleIcon /> },
       { id: 'New', icon: <NewReleasesIcon /> },
       { id: 'Search', icon: <SearchIcon />, pageName: "home"},
       { id: 'Map', icon: <SearchIcon /> , pageName: "map" },
     ],
-  },
-  {
-    id: 'Account',
-    children: [
-      { id: 'Subscriptions', icon: <PaymentIcon /> },
-      { id: 'Status', icon: <InfoIcon /> },
-      { id: 'Settings', icon: <SettingsIcon /> },
-    ],
-  },
+  }
 ];
 
 const styles = theme => ({

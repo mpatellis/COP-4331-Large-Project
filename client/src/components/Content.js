@@ -50,7 +50,7 @@ function Content(props) {
             <Grid item xs>
               <TextField
                 fullWidth
-                placeholder="Search by location, address, or zone ID"
+                placeholder="Search by post title"
                 InputProps={{
                   disableUnderline: true,
                   className: classes.searchInput,
