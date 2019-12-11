@@ -5,8 +5,7 @@ var config = require('../../../config')
 const fs = require('fs');
 const AWS = require('aws-sdk');
 require('dotenv').config()
-process.env.AWS_ID =     'AKIAIFAXIQASCBJHSHSQ'
-process.env.AWS_SECRET = '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'
+
 
 const id =     process.env.AWS_ID;
 const secret = process.env.AWS_SECRET;
