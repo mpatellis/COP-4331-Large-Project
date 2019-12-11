@@ -154,5 +154,8 @@ module.exports = () => {
   router.route('/username/:username')// returns true if username exists
     .get(controller.user.getByUsername)
 
+  router.route('/info/')
+    .get(loginRequired, controller.user.getUserInfo)
+
   return router
 }

@@ -64,6 +64,18 @@ exports.getById = (req, res) => { // :)
     })
 }
 
+exports.getUserInfo = (req, res) => { // :)
+  User
+    .findById(req.query._id, { _id: 0, hash_password: 0 })
+    .exec((err, user) => {
+      if (err) {
+        res.send(err)
+      } else {
+        res.json(user)
+      }
+    })
+}
+
 exports.updateById = (req, res) => { // :)
   User.updateOne({ _id: req.user._id }, req.body, (err, user) => {
     if (err) {

@@ -16,6 +16,14 @@ const s3 = new AWS.S3({
   signatureVersion: 'v4'
 })
 
+function convertPostIN(post) {
+  post.location = {coordinates: []}
+  post._id = undefined
+  var temp = [post.coordinates[0].latitude, post.coordinates[0].longitude]
+  post.location.coordinates = [temp]
+  return new Post(post)
+}
+
 // TODO
 // Need to add zones
 
@@ -27,7 +35,7 @@ const s3 = new AWS.S3({
     }
     req.body.user_id = req.user._id
     let imageFile = req.files.file;
-    const newPost = new Post(req.body)
+    const newPost = convertPostIN(req.body)
     
     // Saving the file in the pictures directory
     imageFile.mv(`${__dirname}/${newPost._id}.jpg`, function(err) {
