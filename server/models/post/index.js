@@ -9,11 +9,11 @@ const postSchema = new Schema({
     ref: 'user',
     required: true
   },
-  // zone_id: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'zone',
-  //   required: true
-  // },
+  zone_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'zone',
+    required: true
+  },
   title: {
     type: String,
     required: true
@@ -21,10 +21,10 @@ const postSchema = new Schema({
   text: {
     type: String
   },
-  // location: {
-  //   type: location.pointSchema,
-  //   required: true
-  // },
+  location: {
+    type: location.pointSchema,
+    required: true
+  },
   open: {
     type: Boolean,
     default: true

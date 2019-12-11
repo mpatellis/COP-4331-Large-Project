@@ -19,7 +19,7 @@ module.exports = () => {
          *         schema:
          *           $ref: "#/definitions/PostArray"
          */
-        .get(controller.post.getAll)
+        .get(loginRequired, controller.post.getAll)
         
         /**
          * @swagger
@@ -42,7 +42,7 @@ module.exports = () => {
          *       400:
          *         description: post couldn't be created.
          */
-        .post(controller.post.addNewPost)
+        .post(loginRequired, controller.post.addNewPost)
 
     router.route('/id/:postId')
         /**
@@ -108,10 +108,10 @@ module.exports = () => {
         /**
         * @swagger
         *
-        * /post/id/:
+        * /post/zoneid/:
         *   get:
         *     tags: [post]
-        *     summary: get post by post id
+        *     summary: get posts by zone id
         *     description: return post
         *     responses:
         *       200:

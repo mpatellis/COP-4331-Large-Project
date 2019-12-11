@@ -62,18 +62,38 @@ const s3 = new AWS.S3({
   }
 
   exports.getAll = (req, res) => {
-    if (process.env.NODE_ENV === config.dev) {
-      Post.find({}, (err, post) => {
-        if (err) {
-          res.send(err)
-        } else {
-          res.json(post)
+    Post.find({}, (err, posts) => {
+      if (err) {
+        res.send(err)
+      } else if (!posts[0]){
+        res.json({})
+      } else /*if (post.user_id == req.user._id)*/ {
+        // Defining what we need from S3
+        var reply = []
+        for (var p in posts) {
+          let filename = posts[p]._id + '.jpg';
+          const signedUrlExpireSeconds = 60 * 5
+          const url = s3.getSignedUrl('getObject', {
+            Bucket: 'fix-this',
+            Key: filename,
+            Expires: signedUrlExpireSeconds
+          })
+          console.log(posts[p])
+          reply[p] = {
+            url: url,
+            body: posts[p]
+          };
         }
-      })
-    } else {
-      return res.status(401).json({ message: 'Unauthorized user!' })
-    }
+        
+
+        res.json(reply);
+      } /*else {
+        return res.status(401).json({ message: 'Unauthorized user!' })
+      }*/
+    })
   }
+
+
 
   // returns json reply
   // reply.body will have all teh post text data
