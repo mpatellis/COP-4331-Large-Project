@@ -29,7 +29,6 @@ function convertPostIN(post) {
 
   // Images are saved in s3 by the post _id
   exports.addNewPost = (req, res) => {
-    console.log(req)
     if (req.files === null || req.files.file === null) {
       return res.status(400).json({ message: 'A file was not sent' })
     }
@@ -264,7 +263,7 @@ function convertPostIN(post) {
           })
           const reply = {
             url: url,
-            body: post
+            body: post[i]
           }
           item[i] = reply
         }

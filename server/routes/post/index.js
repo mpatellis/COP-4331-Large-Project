@@ -13,6 +13,8 @@ module.exports = () => {
          *     tags: [post]
          *     summary: Gets all posts (dev mode only)
          *     description: Returns a list containing all posts.
+         *     security:
+         *       - BearerAuth: []
          *     responses:
          *       200:
          *         description: A list of posts
@@ -64,6 +66,8 @@ module.exports = () => {
         *     tags: [post]
         *     summary: get post by post id
         *     description: returns post with postId
+        *     security:
+        *       - BearerAuth: []
         *     parameters:
         *       - in: path
         *         name: postId
