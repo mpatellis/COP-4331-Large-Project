@@ -23,7 +23,7 @@ exports.newVote = (req, res) => {
 
   // if not create new vote model
   const vote = {
-    user_id: req.params.userId,
+    user_id: req.user.id,
     post_id: req.params.postId,
     up_vote: true
   }

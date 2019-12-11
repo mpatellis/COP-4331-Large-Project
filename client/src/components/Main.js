@@ -18,6 +18,7 @@ import Header from './Header';
 import Map from './Map'
 import Login from './Login'
 import Register from './Register'
+import Posts from './Posts'
 import {AppContext } from '../AppContext' 
 function Copyright() {
   return (
@@ -201,7 +202,7 @@ function Main(props) {
           {(page == 'map') && <Map /> }
           {(page == 'login') && <Login/>}
           {(page == 'register') && <Register/>}
-           {(page == 'home') && <Content />}
+           {(page == 'posts') && <Posts />}
           </main>
           <footer className={classes.footer}>
             <Copyright />
