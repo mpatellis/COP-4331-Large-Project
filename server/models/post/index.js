@@ -21,10 +21,6 @@ const postSchema = new Schema({
   text: {
     type: String
   },
-  // img_id: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'img'
-  // },
   // location: {
   //   type: location.pointSchema,
   //   required: true

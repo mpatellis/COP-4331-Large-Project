@@ -139,3 +139,29 @@ const s3 = new AWS.S3({
       }
     })
   }
+
+  exports.search = (req, res) => { // :)
+    var searchParams = req.body.search.split(' ')
+    searchParams[0] = searchParams[0] || ''
+
+    Post.find({
+      $and: [
+        {
+          $or: [
+            {
+              $and: [
+                { title: { $regex: searchParams[0], $options: 'i' } }
+              ]
+            }
+          ]
+        }
+      ]
+    }, {  },
+    (err, post) => {
+      if (err) {
+        res.send(err)
+      } else {
+        res.json(post)
+      }
+    })
+  }
