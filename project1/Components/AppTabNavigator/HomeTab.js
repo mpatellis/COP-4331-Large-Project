@@ -8,7 +8,7 @@ import {
     ScrollView,
     ActivityIndicator
 } from "react-native";
-
+import { SearchBar } from 'react-native-elements';
 import {Icon, Container, Content} from 'native-base'
 import CardComponent from '../CardComponent'
 
@@ -54,7 +54,6 @@ class HomeTab extends Component{
         },
     })
         const data = await response.json();
-        console.log(data);
         this.setState({refreshing: false, loading: false, token : token ,posts: data})
         //Have a try and catch block for catching errors.
        /* try {
