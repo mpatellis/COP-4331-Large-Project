@@ -201,16 +201,14 @@ function convertPostIN(post) {
   }
 
   exports.search = (req, res) => { // :)
-    var searchParams = req.body.search.split(' ')
-    searchParams[0] = searchParams[0] || ''
-
+    var searchParams = req.body.search
     Post.find({
       $and: [
         {
           $or: [
             {
               $and: [
-                { title: { $regex: searchParams[0], $options: 'i' } }
+                { title: { $regex: searchParams, $options: 'i' } }
               ]
             }
           ]
