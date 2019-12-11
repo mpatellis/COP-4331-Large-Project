@@ -135,8 +135,6 @@ function convertPostIN(post) {
     })
   }
 
-
-
   // returns json reply
   // reply.body will have all teh post text data
   // reply.url will have the url to download the picture
@@ -253,18 +251,24 @@ function convertPostIN(post) {
       if (err) {
         res.send(err)
       } else {
-        let filename = post._id + '.jpg'
-        const signedUrlExpireSeconds = 60 * 5
-        const url = s3.getSignedUrl('getObject', {
-          Bucket: 'fix-this',
-          Key: filename,
-          Expires: signedUrlExpireSeconds
-        })
-        const reply = {
-          url: url,
-          body: post
+        console.log(post)
+        
+        var item = []
+        for (var i in post) {
+          let filename = post._id + '.jpg'
+          const signedUrlExpireSeconds = 60 * 5
+          const url = s3.getSignedUrl('getObject', {
+            Bucket: 'fix-this',
+            Key: filename,
+            Expires: signedUrlExpireSeconds
+          })
+          const reply = {
+            url: url,
+            body: post
+          }
+          item[i] = reply
         }
-        res.json(reply)
+        res.json(item)
       }
     })
   }
