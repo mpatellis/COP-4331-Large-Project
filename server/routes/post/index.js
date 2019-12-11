@@ -125,5 +125,30 @@ module.exports = () => {
         */
         .get(controller.post.getByZoneId)
 
+    router.route('/search')
+        /**
+        * @swagger
+        *
+        * /post/search/:
+        *   post:
+        *     tags: [post]
+        *     summary: searches posts by search params
+        *     description: searches posts by search params
+        *     security:
+        *       - BearerAuth: []
+        *     parameters:
+        *       - name: post
+        *         in: body
+        *         description: searches the posts
+        *         schema:
+        *           $ref: "#/definitions/Search"
+        *     responses:
+        *       200:
+        *         description: update succesfull.
+        *       401:
+        *         description: update failed.
+        */
+        .post(controller.post.search)
+
     return router
 }

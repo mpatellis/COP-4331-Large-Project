@@ -10,6 +10,12 @@
  *                  type: string
  *              text:
  *                  type: string
+ *      Search:
+ *          required:
+ *              -search
+ *          properties:
+ *              search:
+ *                  type: string
  *      User:
  *          required:
  *              - username
