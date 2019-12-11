@@ -49,7 +49,9 @@ function convertPostIN(post) {
         const params = {
           Bucket: 'fix-this',
           Key: filename,
-          Body: fileContent
+          Body: fileContent,
+          ContentType: 'image/jpeg',
+          ContentDisposition: 'inline'
         };
         
         s3.upload(params, function(err, data) {
