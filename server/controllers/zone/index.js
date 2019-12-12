@@ -93,18 +93,26 @@ exports.getAllOwned = (req, res) => {
       
   }
 
-  exports.getAllOwnedBy = (req, res) => {
-      const convert = (req.query.mobile) ? convertZoneOUTMobile : convertZoneOUT
-    Super_admin.find({user_id: req.query.user_id}, (err, master) => {
-        if (err) return res.send(err)
-        if (master == null || master.length == 0) return res.send(master)
-        var tmp = master.map((item => {return {_id: item.zone_id}}))
-        Zone.find().or(tmp)
-        .then((zones) => {
-            return res.json(convert(zones))
-        }).catch((err)=>{return res.send(err)})
-    })   
-  }
+//   exports.getAllOwnedBy = (req, res) => {
+//       const convert = (req.query.mobile) ? convertZoneOUTMobile : convertZoneOUT
+//     Super_admin.find({user_id: req.query.user_id}, (err, master) => {
+//         if (err) return res.send(err)
+//         if (master == null || master.length == 0) return res.send(master)
+//         var tmp = master.map((item => {return {_id: item.zone_id}}))
+//         Zone.find().or(tmp)
+//         .then((zones) => {
+//             return res.json(convert(zones))
+//         }).catch((err)=>{return res.send(err)})
+//     })   
+//   }
+
+exports.getAllOwnedBy = (req, res) => {
+    const convert = (req.query.mobile) ? convertZoneOUTMobile : convertZoneOUT
+      Zone.find({owner_id: req.query.user_id})
+      .then((zones) => {
+          return res.json(convert(zones))
+      }).catch((err)=>{return res.send(err)})
+}
   exports.getZoneInfo = (req, res) => {
     const convert = (req.query.mobile) ? convertZoneOUTMobile : convertZoneOUT
     Zone.find({_id: req.query.zone_id}, (err, zone) => {
