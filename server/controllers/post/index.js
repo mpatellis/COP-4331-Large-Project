@@ -254,7 +254,7 @@ function convertPostIN(post) {
         
         var item = []
         for (var i in post) {
-          let filename = post._id + '.jpg'
+          let filename = post[i]._id + '.jpg'
           const signedUrlExpireSeconds = 60 * 5
           const url = s3.getSignedUrl('getObject', {
             Bucket: 'fix-this',
