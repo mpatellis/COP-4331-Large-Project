@@ -209,7 +209,7 @@ exports.updateById = (req, res) => { // :)
         } else {
             zone.name = req.body.name || zone.name
             zone.color = req.body.color || zone.color
-            if (req.body.parent_zone_id && req.body.parent_zone_id != zone.parent_zone_id && req.body.parent_zone_id != req.body.zone_id) {
+            if (req.body.parent_zone_id != undefined && req.body.parent_zone_id != zone.parent_zone_id && req.body.parent_zone_id != req.body.zone_id) {
                 if (zone.parent_zone_id == null) {
                     Zone.findById(req.body.parent_zone_id, (err,parent) => {
                         if (err || parent == null) {
