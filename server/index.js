@@ -23,7 +23,7 @@ mongoose.Promise = global.Promise
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // Uncomment to hard reset Database
-//mongoose.connection.dropDatabase()
+mongoose.connection.dropDatabase()
 
 const PORT = config.port
 
