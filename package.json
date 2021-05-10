@@ -24,7 +24,7 @@
     "express-fileupload": "^1.1.6",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mongodb": "^3.3.2",
     "mongoose": "^5.7.5",
     "react-beautiful-dnd": "^12.2.0",
