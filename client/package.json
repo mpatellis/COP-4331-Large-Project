@@ -12,7 +12,7 @@
     "react-dom": "^16.10.2",
     "react-google-maps": "^9.4.5",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0",
+    "react-scripts": "5.0.1",
     "react-sortable-tree": "^2.7.1",
     "react-sortable-tree-theme-minimal": "^0.0.14"
   },
